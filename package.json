@@ -2,8 +2,13 @@
   "name": "bluebash-micro-frontend-poc",
   "version": "1.0.0",
   "description": "Micro-Frontend Architecture POC using React, Vite, and Module Federation",
+  "workspaces": [
+    "host",
+    "chat",
+    "email"
+  ],
   "scripts": {
-    "install:all": "npm install && cd host && npm install && cd ../chat && npm install && cd ../email && npm install",
+    "install:all": "npm install",
     "dev": "concurrently -n \"HOST,CHAT,EMAIL\" -c \"bgBlue.bold,bgGreen.bold,bgMagenta.bold\" \"npm run dev:host\" \"npm run dev:chat\" \"npm run dev:email\"",
     "dev:host": "cd host && npm run dev",
     "dev:chat": "cd chat && npm run dev",

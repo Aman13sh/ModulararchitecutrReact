@@ -2,6 +2,11 @@
   "name": "host",
   "version": "1.0.0",
   "type": "module",
+  "main": "src/designSystem/index.js",
+  "exports": {
+    ".": "./src/designSystem/index.js",
+    "./styles.css": "./src/designSystem/styles.css"
+  },
   "scripts": {
     "dev": "vite",
     "build": "vite build",

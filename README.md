@@ -59,9 +59,11 @@ Each application:
 
 **Complexity** - More moving parts to manage compared to a monolith.
 
-**Code Duplication** - Design system is copied to each app (could be solved with an npm package).
+**Code Duplication** - Design system is currently copied to each app for POC simplicity. In production, this would be a shared npm package.
 
 **Initial Setup** - Takes more time upfront to set up the architecture.
+
+> **Note on Design System:** Currently, the design system is copied to `host/`, `chat/`, and `email/` apps. This was intentional for the POC to avoid deployment complexity. In a production environment, the design system would be published as a scoped npm package (`@company/design-system`) that all micro-frontends import, ensuring a true single source of truth.
 
 ## Project Structure
 
@@ -239,7 +241,40 @@ Takes about 10 minutes to scaffold a new micro-frontend.
 
 For a production system, consider:
 
-- **Shared npm package** - Publish design system to avoid duplication
+**1. Shared Design System as NPM Package**
+
+Instead of copying the design system, publish it:
+
+```bash
+# Create packages/design-system
+packages/design-system/
+  ├── package.json  (name: "@company/design-system")
+  ├── src/
+  │   ├── Button.jsx
+  │   ├── Card.jsx
+  │   ├── Input.jsx
+  │   └── Badge.jsx
+  └── README.md
+
+# In each app's package.json
+{
+  "dependencies": {
+    "@company/design-system": "^1.0.0"
+  }
+}
+
+# Import in any app
+import { Button, Card } from '@company/design-system';
+```
+
+**Benefits:**
+- Single source of truth
+- Version control
+- Easy updates across all apps
+- Can be used in any project
+
+**Other Production Improvements:**
+
 - **Authentication** - Shared auth via JWT in cookies/localStorage
 - **Error boundaries** - Graceful handling of micro-frontend failures
 - **Monitoring** - Track performance and errors per micro-frontend

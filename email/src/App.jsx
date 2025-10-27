@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Card, Input, Badge } from './designSystem';
+import { Button, Card, Input, Badge } from 'host';
 import './App.css';
 
 // Mock email data
@@ -256,9 +256,8 @@ function EmailApp() {
       </Card>
 
       <div className="email-info">
-        <p>This is a standalone Email micro-frontend using the shared Design System</p>
+        <p>This is a standalone Email micro-frontend consuming Design System from Host</p>
         <Badge variant="secondary">Micro-Frontend</Badge>
-        <Badge variant="success">Port 5176</Badge>
       </div>
     </div>
   );

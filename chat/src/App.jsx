@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Card, Input, Badge } from './designSystem';
+import { Button, Card, Input, Badge } from 'host';
 import './App.css';
 
 // Mock chat data
@@ -160,9 +160,8 @@ function ChatApp() {
       </Card>
 
       <div className="chat-info">
-        <p>This is a standalone Chat micro-frontend using the shared Design System</p>
+        <p>This is a standalone Chat micro-frontend consuming Design System from Host</p>
         <Badge variant="primary">Micro-Frontend</Badge>
-        <Badge variant="success">Port 5175</Badge>
       </div>
     </div>
   );

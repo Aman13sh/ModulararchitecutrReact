@@ -30,7 +30,6 @@ function App() {
                 <p style={{ marginBottom: '15px', color: '#6b7280' }}>
                   Real-time messaging interface with conversations, search, and notifications.
                 </p>
-                <Badge variant="success">Port 5175</Badge>
                 <div style={{ marginTop: '15px' }}>
                   <Button
                     variant="primary"
@@ -49,7 +48,6 @@ function App() {
                 <p style={{ marginBottom: '15px', color: '#6b7280' }}>
                   Full-featured email client with inbox, compose, and filtering capabilities.
                 </p>
-                <Badge variant="secondary">Port 5176</Badge>
                 <div style={{ marginTop: '15px' }}>
                   <Button
                     variant="primary"
@@ -108,19 +106,19 @@ function App() {
 
         <Card title="Architecture Overview">
           <div style={{ backgroundColor: '#f9fafb', padding: '20px', borderRadius: '8px', fontFamily: 'monospace', fontSize: '14px', lineHeight: '1.8' }}>
-            <div>📦 <strong>Host Application</strong> (Port 5174)</div>
+            <div>📦 <strong>Host Application</strong></div>
             <div style={{ paddingLeft: '20px' }}>├─ Design System & Shared Components</div>
             <div style={{ paddingLeft: '20px' }}>├─ Documentation & Demo</div>
             <div style={{ paddingLeft: '20px' }}>└─ Links to Micro-Frontends</div>
             <br />
-            <div>💬 <strong>Chat Micro-Frontend</strong> (Port 5175)</div>
+            <div>💬 <strong>Chat Micro-Frontend</strong></div>
             <div style={{ paddingLeft: '20px' }}>├─ Independent React App</div>
-            <div style={{ paddingLeft: '20px' }}>├─ Uses Shared Design System</div>
+            <div style={{ paddingLeft: '20px' }}>├─ Consumes Design System from Host</div>
             <div style={{ paddingLeft: '20px' }}>└─ Chat Features & State</div>
             <br />
-            <div>📧 <strong>Email Micro-Frontend</strong> (Port 5176)</div>
+            <div>📧 <strong>Email Micro-Frontend</strong></div>
             <div style={{ paddingLeft: '20px' }}>├─ Independent React App</div>
-            <div style={{ paddingLeft: '20px' }}>├─ Uses Shared Design System</div>
+            <div style={{ paddingLeft: '20px' }}>├─ Consumes Design System from Host</div>
             <div style={{ paddingLeft: '20px' }}>└─ Email Features & State</div>
           </div>
         </Card>
