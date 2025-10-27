@@ -1,0 +1,225 @@
+.chat-app {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.chat-container {
+  display: grid;
+  grid-template-columns: 350px 1fr;
+  height: 600px;
+  gap: 0;
+}
+
+/* Conversations Panel */
+.conversations-panel {
+  border-right: 1px solid var(--gray-200);
+  display: flex;
+  flex-direction: column;
+}
+
+.conversations-header {
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--gray-200);
+}
+
+.conversations-header h3 {
+  margin-bottom: var(--spacing-md);
+  color: var(--gray-800);
+}
+
+.conversations-list {
+  overflow-y: auto;
+  flex: 1;
+}
+
+.conversation-item {
+  display: flex;
+  padding: var(--spacing-md);
+  cursor: pointer;
+  transition: background-color 0.2s;
+  gap: var(--spacing-md);
+  border-bottom: 1px solid var(--gray-100);
+}
+
+.conversation-item:hover {
+  background-color: var(--gray-50);
+}
+
+.conversation-item.active {
+  background-color: var(--gray-100);
+  border-left: 3px solid var(--primary-color);
+}
+
+.conversation-avatar {
+  font-size: 2rem;
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--gray-100);
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.conversation-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.conversation-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: var(--spacing-xs);
+}
+
+.conversation-name {
+  font-weight: 600;
+  color: var(--gray-800);
+}
+
+.conversation-time {
+  font-size: var(--font-size-xs);
+  color: var(--gray-500);
+}
+
+.conversation-preview {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.conversation-last-message {
+  font-size: var(--font-size-sm);
+  color: var(--gray-600);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Messages Panel */
+.messages-panel {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--gray-50);
+}
+
+.messages-header {
+  padding: var(--spacing-lg);
+  background-color: white;
+  border-bottom: 1px solid var(--gray-200);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.messages-header h3 {
+  margin: 0;
+  color: var(--gray-800);
+}
+
+.status {
+  font-size: var(--font-size-sm);
+  color: var(--success-color);
+}
+
+.messages-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.message {
+  display: flex;
+  max-width: 70%;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.message-own {
+  margin-left: auto;
+}
+
+.message-other {
+  margin-right: auto;
+}
+
+.message-content {
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-lg);
+  background-color: white;
+  box-shadow: var(--shadow-sm);
+}
+
+.message-own .message-content {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.message-content strong {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+}
+
+.message-content p {
+  margin: 0;
+  margin-bottom: var(--spacing-xs);
+}
+
+.message-time {
+  font-size: var(--font-size-xs);
+  opacity: 0.7;
+}
+
+.message-input-container {
+  padding: var(--spacing-lg);
+  background-color: white;
+  border-top: 1px solid var(--gray-200);
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: flex-start;
+}
+
+/* Chat Info */
+.chat-info {
+  text-align: center;
+  padding: var(--spacing-lg);
+  background-color: var(--gray-100);
+  border-radius: var(--radius-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
+.chat-info p {
+  color: var(--gray-600);
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .chat-container {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+
+  .conversations-panel {
+    border-right: none;
+    border-bottom: 1px solid var(--gray-200);
+  }
+
+  .message {
+    max-width: 85%;
+  }
+}

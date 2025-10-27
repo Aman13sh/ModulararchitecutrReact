@@ -1,0 +1,91 @@
+.ds-button {
+  font-family: var(--font-family);
+  font-weight: 500;
+  border: none;
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.ds-button:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Variants */
+.ds-button--primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.ds-button--primary:hover:not(:disabled) {
+  background-color: var(--primary-hover);
+}
+
+.ds-button--secondary {
+  background-color: var(--secondary-color);
+  color: white;
+}
+
+.ds-button--secondary:hover:not(:disabled) {
+  background-color: #7c3aed;
+}
+
+.ds-button--success {
+  background-color: var(--success-color);
+  color: white;
+}
+
+.ds-button--success:hover:not(:disabled) {
+  background-color: #059669;
+}
+
+.ds-button--danger {
+  background-color: var(--danger-color);
+  color: white;
+}
+
+.ds-button--danger:hover:not(:disabled) {
+  background-color: #dc2626;
+}
+
+.ds-button--outline {
+  background-color: transparent;
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+}
+
+.ds-button--outline:hover:not(:disabled) {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+/* Sizes */
+.ds-button--small {
+  padding: var(--spacing-xs) var(--spacing-md);
+  font-size: var(--font-size-sm);
+}
+
+.ds-button--medium {
+  padding: var(--spacing-sm) var(--spacing-lg);
+  font-size: var(--font-size-base);
+}
+
+.ds-button--large {
+  padding: var(--spacing-md) var(--spacing-xl);
+  font-size: var(--font-size-lg);
+}
+
+/* States */
+.ds-button--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.ds-button--full-width {
+  width: 100%;
+}

@@ -1,0 +1,30 @@
+.ds-card {
+  background-color: white;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.ds-card--hoverable:hover {
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-2px);
+}
+
+.ds-card__header {
+  padding: var(--spacing-lg);
+  border-bottom: 1px solid var(--gray-200);
+  font-weight: 600;
+  font-size: var(--font-size-lg);
+  color: var(--gray-800);
+}
+
+.ds-card__body {
+  padding: var(--spacing-lg);
+}
+
+.ds-card__footer {
+  padding: var(--spacing-lg);
+  border-top: 1px solid var(--gray-200);
+  background-color: var(--gray-50);
+}
