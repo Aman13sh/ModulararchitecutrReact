@@ -35,7 +35,7 @@ function App() {
                   <Button
                     variant="primary"
                     fullWidth
-                    onClick={() => window.open('http://localhost:5175', '_blank')}
+                    onClick={() => window.open('https://chat-seven-psi-63.vercel.app', '_blank')}
                   >
                     Open Chat App →
                   </Button>
@@ -54,7 +54,7 @@ function App() {
                   <Button
                     variant="primary"
                     fullWidth
-                    onClick={() => window.open('http://localhost:5176', '_blank')}
+                    onClick={() => window.open('https://mail-sable.vercel.app', '_blank')}
                   >
                     Open Email App →
                   </Button>
@@ -130,9 +130,9 @@ function App() {
       <footer className="app-footer">
         <p>Built with React + Vite</p>
         <p className="app-footer__tech">
-          <span>Host: localhost:5174</span>
-          <span>Chat: localhost:5175</span>
-          <span>Email: localhost:5176</span>
+          <span>Host: modulararchitecutr-react.vercel.app</span>
+          <span>Chat: chat-seven-psi-63.vercel.app</span>
+          <span>Email: mail-sable.vercel.app</span>
         </p>
       </footer>
     </div>
