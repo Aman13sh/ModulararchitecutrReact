@@ -1,6 +1,6 @@
 # Micro-Frontend Architecture POC
 
-A **professional, production-ready** demonstration of micro-frontend architecture using React + TypeScript, showcasing advanced patterns including iframe embedding, EventBus communication, and a complete design system documentation.
+A **professional, production-ready** demonstration of micro-frontend architecture using React + TypeScript + **Webpack Module Federation**, showcasing advanced patterns including runtime module loading, EventBus communication, and a complete design system documentation.
 
 ## 🚀 Professional Features
 
@@ -20,11 +20,11 @@ This project goes beyond basic micro-frontend concepts and demonstrates producti
    - Track micro-frontend opens/closes
    - Extensible for custom events
 
-3. **🖼️ Iframe Embedding with PostMessage** - Dynamic micro-frontend loading
-   - Lazy-loaded micro-frontends in modals
-   - Cross-origin communication via postMessage
-   - Message logging and debugging
-   - Seamless integration or standalone modes
+3. **🔌 Module Federation** - Runtime micro-frontend loading
+   - Dynamic module loading at runtime using Webpack Module Federation
+   - Shared dependencies (React, React-DOM, react-icons)
+   - Zero build-time coupling between apps
+   - True micro-frontend independence
 
 4. **📘 Full TypeScript Implementation** - Enterprise-grade type safety
    - Fully typed React components with interfaces
@@ -38,8 +38,8 @@ This project goes beyond basic micro-frontend concepts and demonstrates producti
    - Zero configuration for team members
 
 6. **🔄 Shared Design System** - True single source of truth
-   - Design system defined in host application
-   - Consumed by chat and email via Vite aliases
+   - Design system exposed via Module Federation
+   - Consumed by chat and email at runtime
    - TypeScript interfaces exported for type safety
    - Consistent UI across all micro-frontends
 
@@ -47,23 +47,35 @@ This project goes beyond basic micro-frontend concepts and demonstrates producti
 
 This is a **production-ready** micro-frontend architecture with three fully independent TypeScript applications:
 
-- **Host Application** - Main dashboard, design system docs, notification system, iframe embedding
-- **Chat Application** - Messaging interface consuming shared design system
-- **Email Application** - Email client consuming shared design system
+- **Host Application** - Main dashboard, design system docs, notification system, federated module loader
+- **Chat Application** - Messaging interface consuming shared design system via Module Federation
+- **Email Application** - Email client consuming shared design system via Module Federation
 
 Each application runs independently and can be developed, tested, and deployed separately.
 
 ## Quick Start
 
+### ⚠️ Important: Module Federation requires Preview Mode
+
+Due to limitations with `@originjs/vite-plugin-federation`, Module Federation **does not work in dev mode** (`npm run dev`). You must use **preview mode** which serves the built production assets.
+
 ```bash
 # Install dependencies
 npm run install:all
 
-# Start all applications
-npm run dev
+# Build all applications
+npm run build
+
+# Start preview servers (serves built assets)
+npm run preview
 ```
 
 Open http://localhost:5174 in your browser. You'll see the host application with buttons to open the chat and email apps.
+
+**Why Preview Mode?**
+- Dev mode (`npm run dev`) doesn't generate `remoteEntry.js` files properly
+- Preview mode (`npm run preview`) serves the built production assets where Module Federation works correctly
+- This is a known limitation of the Vite Module Federation plugin
 
 ## Environment Configuration
 
@@ -245,31 +257,34 @@ window.postMessage({
 
 ## Running the Applications
 
-### All Together (Recommended)
+### Production Mode (Preview) - Required for Module Federation
+
+**This is the recommended way to test Module Federation:**
+
+```bash
+# Build all apps
+npm run build
+
+# Start preview servers
+npm run preview
+```
+
+This serves the built production assets on ports 5174, 5175, 5176 where Module Federation works correctly.
+
+### Development Mode (Dev)
+
+For rapid development without Module Federation:
 
 ```bash
 npm run dev
 ```
 
-This starts all three applications using concurrently. You'll see color-coded output:
-- Blue: Host (5174)
-- Green: Chat (5175)
-- Magenta: Email (5176)
+**Note:** Module Federation will NOT work in dev mode. Use this only for:
+- Developing individual app features
+- Testing design system changes
+- Working on UI components
 
-### Individually
-
-If you prefer separate terminals:
-
-```bash
-# Terminal 1
-npm run dev:host
-
-# Terminal 2
-npm run dev:chat
-
-# Terminal 3
-npm run dev:email
-```
+When you need to test Module Federation, switch to preview mode.
 
 ## Building for Production
 
@@ -285,22 +300,162 @@ npm run build:email
 
 Each app outputs to its own `dist/` folder.
 
-## Deployment
+## Deployment to Vercel
 
-The easiest way to deploy is using Vercel:
+### Step 1: Push to GitHub
 
-1. Push your code to GitHub (one repository)
-2. Create three Vercel projects:
-   - Project 1: Root directory = `host`
-   - Project 2: Root directory = `chat`
-   - Project 3: Root directory = `email`
+```bash
+# Initialize git if not already done
+git init
+git add .
+git commit -m "Module Federation implementation"
 
-Each app gets its own URL. Update the button URLs in the host app to point to production.
+# Push to GitHub
+git remote add origin https://github.com/yourusername/your-repo.git
+git push -u origin main
+```
 
-**Example URLs:**
-- Host: `yourname-host.vercel.app`
-- Chat: `yourname-chat.vercel.app`
-- Email: `yourname-email.vercel.app`
+### Step 2: Deploy Each App to Vercel
+
+You need to create **three separate Vercel projects** from the same repository:
+
+#### Deploy HOST
+
+1. Go to [vercel.com](https://vercel.com) and click "New Project"
+2. Import your GitHub repository
+3. Configure:
+   - **Project Name**: `bluebash-host` (or your choice)
+   - **Root Directory**: `host`
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
+4. Click "Deploy"
+5. **Save the URL** (e.g., `https://bluebash-host.vercel.app`)
+
+#### Deploy CHAT
+
+1. Click "New Project" again (same repository)
+2. Configure:
+   - **Project Name**: `bluebash-chat`
+   - **Root Directory**: `chat`
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
+3. Click "Deploy"
+4. **Save the URL** (e.g., `https://bluebash-chat.vercel.app`)
+
+#### Deploy EMAIL
+
+1. Click "New Project" again (same repository)
+2. Configure:
+   - **Project Name**: `bluebash-email`
+   - **Root Directory**: `email`
+   - **Build Command**: `npm run build`
+   - **Output Directory**: `dist`
+3. Click "Deploy"
+4. **Save the URL** (e.g., `https://bluebash-email.vercel.app`)
+
+### Step 3: Update Module Federation URLs
+
+After getting all three URLs, update the vite configs with production URLs:
+
+#### host/vite.config.ts
+
+```typescript
+const isProduction = process.env.NODE_ENV === 'production';
+const chatUrl = isProduction
+  ? 'https://bluebash-chat.vercel.app'
+  : 'http://localhost:5175';
+const emailUrl = isProduction
+  ? 'https://bluebash-email.vercel.app'
+  : 'http://localhost:5176';
+
+export default defineConfig({
+  plugins: [
+    react(),
+    federation({
+      name: 'host',
+      remotes: {
+        chatApp: {
+          external: `Promise.resolve('${chatUrl}/assets/remoteEntry.js')`,
+          from: 'webpack',
+          externalType: 'promise'
+        },
+        emailApp: {
+          external: `Promise.resolve('${emailUrl}/assets/remoteEntry.js')`,
+          from: 'webpack',
+          externalType: 'promise'
+        }
+      },
+      // ... rest of config
+    })
+  ],
+  // ... rest of config
+});
+```
+
+#### chat/vite.config.ts
+
+```typescript
+const isProduction = process.env.NODE_ENV === 'production';
+const hostUrl = isProduction
+  ? 'https://bluebash-host.vercel.app'
+  : 'http://localhost:5174';
+
+export default defineConfig({
+  plugins: [
+    react(),
+    federation({
+      name: 'chatApp',
+      remotes: {
+        host: {
+          external: `Promise.resolve('${hostUrl}/assets/remoteEntry.js')`,
+          from: 'webpack',
+          externalType: 'promise'
+        }
+      },
+      // ... rest of config
+    })
+  ],
+  // ... rest of config
+});
+```
+
+#### email/vite.config.ts
+
+Same as CHAT, update with production HOST URL.
+
+### Step 4: Update Environment Variables (Optional)
+
+If using `.env` files, update HOST's environment variables in Vercel dashboard:
+
+1. Go to HOST project settings
+2. Navigate to "Environment Variables"
+3. Add:
+   ```
+   VITE_CHAT_URL=https://bluebash-chat.vercel.app
+   VITE_EMAIL_URL=https://bluebash-email.vercel.app
+   ```
+
+### Step 5: Redeploy
+
+After updating configs:
+
+```bash
+git add .
+git commit -m "Update Module Federation URLs for production"
+git push
+```
+
+Vercel will automatically redeploy all projects.
+
+### Step 6: Test Module Federation
+
+1. Open `https://bluebash-host.vercel.app`
+2. Click "Open (Module Federation)" for Chat
+3. Open browser DevTools > Network tab
+4. You should see `remoteEntry.js` loaded from the CHAT URL
+5. The Chat app should load seamlessly
+
+**Module Federation is now working across different Vercel deployments!** 🎉
 
 ## 📚 Documentation
 

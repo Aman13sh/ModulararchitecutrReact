@@ -1,5 +1,4 @@
 
-
 type EventCallback<T = any> = (data: T) => void;
 type UnsubscribeFn = () => void;
 

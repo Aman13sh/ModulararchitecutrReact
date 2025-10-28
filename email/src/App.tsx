@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Card, Input, Badge } from 'host';
+// @ts-ignore - Module Federation import
+import { Button, Card, Input, Badge } from 'host/designSystem';
 import './App.css';
 import { MdMail, MdInbox, MdMarkunread, MdStar, MdStarBorder } from 'react-icons/md';
 
@@ -259,7 +260,7 @@ function EmailApp() {
                 type="text"
                 placeholder="Search emails..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
                 fullWidth
               />
             </div>
@@ -299,7 +300,7 @@ function EmailApp() {
                     type="email"
                     placeholder="recipient@example.com"
                     value={composeForm.to}
-                    onChange={(e) => setComposeForm({...composeForm, to: e.target.value})}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setComposeForm({...composeForm, to: e.target.value})}
                     fullWidth
                   />
                   <Input
@@ -307,7 +308,7 @@ function EmailApp() {
                     type="text"
                     placeholder="Email subject"
                     value={composeForm.subject}
-                    onChange={(e) => setComposeForm({...composeForm, subject: e.target.value})}
+                    onChange={(e: React.ChangeEvent<HTMLInputElement>) => setComposeForm({...composeForm, subject: e.target.value})}
                     fullWidth
                   />
                   <div className="compose-body">

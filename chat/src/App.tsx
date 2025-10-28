@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
-import { Button, Card, Input, Badge } from 'host';
+// @ts-ignore - Module Federation import
+import { Button, Card, Input, Badge } from 'host/designSystem';
 import './App.css';
 import { MdPerson, MdGroup } from 'react-icons/md';
 
@@ -187,7 +188,7 @@ function ChatApp() {
                 type="text"
                 placeholder="Search conversations..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setSearchQuery(e.target.value)}
                 fullWidth
               />
             </div>
@@ -246,7 +247,7 @@ function ChatApp() {
                 type="text"
                 placeholder="Type a message..."
                 value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setNewMessage(e.target.value)}
                 fullWidth
               />
               <Button onClick={handleSendMessage} variant="primary">

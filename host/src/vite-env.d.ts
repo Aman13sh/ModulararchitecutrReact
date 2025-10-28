@@ -8,3 +8,18 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv;
 }
+
+// Module Federation type declarations
+declare module 'chatApp/App' {
+  const App: React.ComponentType;
+  export default App;
+}
+
+declare module 'emailApp/App' {
+  const App: React.ComponentType;
+  export default App;
+}
+
+declare module 'host/designSystem' {
+  export * from './designSystem';
+}

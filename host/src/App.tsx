@@ -3,7 +3,7 @@ import './App.css';
 import { Button, Card, Badge } from './designSystem';
 import eventBus from './designSystem/eventBus';
 import DesignSystemDocs from './components/DesignSystemDocs';
-import MicroFrontendModal from './components/MicroFrontendModal';
+import FederatedWrapper from './components/FederatedWrapper';
 import NotificationSystem from './components/NotificationSystem';
 import {
   MdChat,
@@ -26,13 +26,25 @@ function App() {
   const [activeModal, setActiveModal] = useState<'chat' | 'email' | null>(null);
   const [viewMode, setViewMode] = useState<'overview' | 'docs'>('overview');
 
+  const trackWindowClose = (windowRef: Window | null, appName: 'chat' | 'email') => {
+    if (!windowRef) return;
+
+    const checkInterval = setInterval(() => {
+      if (windowRef.closed) {
+        clearInterval(checkInterval);
+        eventBus.emit(`${appName}:closed`);
+      }
+    }, 1000); // Check every second
+  };
+
   const handleOpenChat = (embedded: boolean = false) => {
     if (embedded) {
       setActiveModal('chat');
       eventBus.emit('chat:opened');
     } else {
-      window.open(chatUrl, '_blank');
+      const newWindow = window.open(chatUrl, '_blank');
       eventBus.emit('chat:opened');
+      trackWindowClose(newWindow, 'chat');
     }
   };
 
@@ -41,8 +53,9 @@ function App() {
       setActiveModal('email');
       eventBus.emit('email:opened');
     } else {
-      window.open(emailUrl, '_blank');
+      const newWindow = window.open(emailUrl, '_blank');
       eventBus.emit('email:opened');
+      trackWindowClose(newWindow, 'email');
     }
   };
 
@@ -112,7 +125,7 @@ function App() {
                         fullWidth
                         onClick={() => handleOpenChat(true)}
                       >
-                        Open in Modal (iframe)
+                        Open (Module Federation)
                       </Button>
                       <Button
                         variant="outline"
@@ -140,7 +153,7 @@ function App() {
                         fullWidth
                         onClick={() => handleOpenEmail(true)}
                       >
-                        Open in Modal (iframe)
+                        Open (Module Federation)
                       </Button>
                       <Button
                         variant="outline"
@@ -162,8 +175,8 @@ function App() {
               }}>
                 <p style={{ margin: 0, fontSize: '0.875rem', color: '#1e40af', display: 'flex', alignItems: 'center', gap: '6px' }}>
                   <MdLightbulb size={16} style={{ flexShrink: 0 }} />
-                  <span><strong>Pro Tip:</strong> Click "Open in Modal" to see iframe embedding with postMessage
-                  communication. Watch the notification system track app opens/closes via EventBus!</span>
+                  <span><strong>Pro Tip:</strong> Click "Open (Module Federation)" to see runtime module loading.
+                  The micro-frontends are loaded dynamically at runtime using Webpack Module Federation!</span>
                 </p>
               </div>
             </Card>
@@ -187,9 +200,9 @@ function App() {
 
                 <div className="feature-item">
                   <div className="feature-icon"><MdViewQuilt size={24} /></div>
-                  <h4>Iframe Embedding</h4>
-                  <p>Lazy-loaded micro-frontends in modals with postMessage for cross-origin communication.</p>
-                  <Badge variant="secondary">PostMessage</Badge>
+                  <h4>Module Federation</h4>
+                  <p>Runtime micro-frontend loading using Webpack Module Federation for seamless integration.</p>
+                  <Badge variant="secondary">Dynamic Modules</Badge>
                 </div>
 
                 <div className="feature-item">
@@ -209,7 +222,7 @@ function App() {
                 <div className="feature-item">
                   <div className="feature-icon"><MdSync size={24} /></div>
                   <h4>Shared Design System</h4>
-                  <p>Single source of truth for UI components consumed by all micro-frontends via Vite aliases.</p>
+                  <p>Single source of truth for UI components consumed by all micro-frontends via Module Federation.</p>
                   <Badge variant="primary">Consistent</Badge>
                 </div>
               </div>
@@ -221,27 +234,27 @@ function App() {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <MdInventory size={16} /> <strong>Host Application</strong>
                 </div>
-                <div style={{ paddingLeft: '20px' }}>├─ Design System (Single Source of Truth)</div>
+                <div style={{ paddingLeft: '20px' }}>├─ Design System (Exposed via Module Federation)</div>
                 <div style={{ paddingLeft: '20px' }}>├─ EventBus (Pub/Sub Communication)</div>
                 <div style={{ paddingLeft: '20px' }}>├─ Notification System</div>
-                <div style={{ paddingLeft: '20px' }}>├─ Iframe Modal (Lazy Loading)</div>
+                <div style={{ paddingLeft: '20px' }}>├─ Federated Module Loader</div>
                 <div style={{ paddingLeft: '20px' }}>└─ Design System Documentation</div>
                 <br />
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <MdChat size={16} /> <strong>Chat Micro-Frontend</strong>
                 </div>
                 <div style={{ paddingLeft: '20px' }}>├─ Independent TypeScript React App</div>
-                <div style={{ paddingLeft: '20px' }}>├─ Consumes Design System from Host</div>
-                <div style={{ paddingLeft: '20px' }}>├─ PostMessage Communication Ready</div>
-                <div style={{ paddingLeft: '20px' }}>└─ Standalone & Embeddable</div>
+                <div style={{ paddingLeft: '20px' }}>├─ Consumes Design System via Module Federation</div>
+                <div style={{ paddingLeft: '20px' }}>├─ Exposes App Component</div>
+                <div style={{ paddingLeft: '20px' }}>└─ Standalone & Dynamically Loadable</div>
                 <br />
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                   <MdEmail size={16} /> <strong>Email Micro-Frontend</strong>
                 </div>
                 <div style={{ paddingLeft: '20px' }}>├─ Independent TypeScript React App</div>
-                <div style={{ paddingLeft: '20px' }}>├─ Consumes Design System from Host</div>
-                <div style={{ paddingLeft: '20px' }}>├─ PostMessage Communication Ready</div>
-                <div style={{ paddingLeft: '20px' }}>└─ Standalone & Embeddable</div>
+                <div style={{ paddingLeft: '20px' }}>├─ Consumes Design System via Module Federation</div>
+                <div style={{ paddingLeft: '20px' }}>├─ Exposes App Component</div>
+                <div style={{ paddingLeft: '20px' }}>└─ Standalone & Dynamically Loadable</div>
               </div>
             </Card>
           </>
@@ -261,14 +274,11 @@ function App() {
         </p>
       </footer>
 
-      {/* Micro-Frontend Modal */}
+      {/* Federated Micro-Frontend */}
       {activeModal && (
-        <MicroFrontendModal
-          isOpen={true}
-          onClose={handleCloseModal}
-          url={activeModal === 'chat' ? chatUrl : emailUrl}
-          title={activeModal === 'chat' ? 'Chat Application' : 'Email Application'}
+        <FederatedWrapper
           app={activeModal}
+          onClose={handleCloseModal}
         />
       )}
     </div>
