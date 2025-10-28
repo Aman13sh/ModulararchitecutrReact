@@ -408,9 +408,12 @@
   }
 
   .email-sidebar {
+    width: 200px;
+    flex-shrink: 0;
     border-right: 1px solid var(--gray-200);
     border-bottom: none;
     padding: var(--spacing-lg);
+    order: 0;
   }
 
   .email-filters {
@@ -422,13 +425,18 @@
   .filter-button {
     font-size: var(--font-size-sm);
     padding: var(--spacing-sm) var(--spacing-md);
+    white-space: normal;
   }
 
   .email-list-panel {
+    width: 350px;
+    flex-shrink: 0;
     border-right: 1px solid var(--gray-200);
     border-bottom: none;
     height: 100%;
-    width: auto;
+    min-height: auto;
+    max-height: none;
+    order: 0;
   }
 
   .email-list-header {
@@ -436,7 +444,9 @@
   }
 
   .email-view-panel {
+    flex: 1;
     min-height: auto;
+    order: 0;
   }
 
   .email-item {
