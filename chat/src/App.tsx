@@ -1,16 +1,38 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Button, Card, Input, Badge } from 'host';
 import './App.css';
 
+// TypeScript interfaces
+interface Conversation {
+  id: number;
+  name: string;
+  lastMessage: string;
+  time: string;
+  unread: number;
+  avatar: string;
+}
+
+interface Message {
+  id: number;
+  sender: string;
+  text: string;
+  time: string;
+  isOwn: boolean;
+}
+
+interface MessagesMap {
+  [conversationId: number]: Message[];
+}
+
 // Mock chat data
-const initialConversations = [
+const initialConversations: Conversation[] = [
   { id: 1, name: 'John Doe', lastMessage: 'Hey, how are you?', time: '10:30 AM', unread: 2, avatar: '👨' },
   { id: 2, name: 'Jane Smith', lastMessage: 'Meeting at 3 PM?', time: '09:15 AM', unread: 0, avatar: '👩' },
   { id: 3, name: 'Team Chat', lastMessage: 'Project update available', time: 'Yesterday', unread: 5, avatar: '👥' },
   { id: 4, name: 'Sarah Wilson', lastMessage: 'Thanks for the help!', time: 'Yesterday', unread: 0, avatar: '👩‍💼' },
 ];
 
-const initialMessages = {
+const initialMessages: MessagesMap = {
   1: [
     { id: 1, sender: 'John Doe', text: 'Hey, how are you?', time: '10:25 AM', isOwn: false },
     { id: 2, sender: 'You', text: 'I am good! How about you?', time: '10:27 AM', isOwn: true },
@@ -36,11 +58,11 @@ const initialMessages = {
 };
 
 function ChatApp() {
-  const [conversations, setConversations] = useState(initialConversations);
-  const [selectedConversation, setSelectedConversation] = useState(1);
-  const [messages, setMessages] = useState(initialMessages);
-  const [newMessage, setNewMessage] = useState('');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [conversations, setConversations] = useState<Conversation[]>(initialConversations);
+  const [selectedConversation, setSelectedConversation] = useState<number>(1);
+  const [messages, setMessages] = useState<MessagesMap>(initialMessages);
+  const [newMessage, setNewMessage] = useState<string>('');
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
 
   const handleSendMessage = () => {
@@ -148,7 +170,6 @@ function ChatApp() {
                 placeholder="Type a message..."
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
-                onKeyPress={(e) => e.key === 'Enter' && handleSendMessage()}
                 fullWidth
               />
               <Button onClick={handleSendMessage} variant="primary">

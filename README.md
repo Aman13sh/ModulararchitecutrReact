@@ -1,14 +1,55 @@
 # Micro-Frontend Architecture POC
 
-A practical demonstration of micro-frontend architecture using React, showcasing how independent applications can work together while maintaining autonomy.
+A **professional, production-ready** demonstration of micro-frontend architecture using React + TypeScript, showcasing advanced patterns including iframe embedding, EventBus communication, and a complete design system documentation.
+
+## 🚀 Professional Features
+
+This project goes beyond basic micro-frontend concepts and demonstrates production-level features:
+
+### ✨ Advanced Implementations
+
+1. **🎨 Design System Documentation** - Storybook-like interactive component showcase
+   - Live component previews with all variants
+   - TypeScript prop tables
+   - Copy-to-clipboard code snippets
+   - Searchable and comprehensive
+
+2. **🔔 EventBus Notification System** - Real-time cross-app communication
+   - Pub/Sub pattern for decoupled communication
+   - Live notification toasts for app events
+   - Track micro-frontend opens/closes
+   - Extensible for custom events
+
+3. **🖼️ Iframe Embedding with PostMessage** - Dynamic micro-frontend loading
+   - Lazy-loaded micro-frontends in modals
+   - Cross-origin communication via postMessage
+   - Message logging and debugging
+   - Seamless integration or standalone modes
+
+4. **📘 Full TypeScript Implementation** - Enterprise-grade type safety
+   - Fully typed React components with interfaces
+   - Type declarations for shared modules
+   - Compile-time error catching
+   - Excellent IDE autocomplete
+
+5. **⚙️ Environment-Based Configuration** - Smart deployment handling
+   - Auto-switches between localhost (dev) and production URLs
+   - `.env.development` and `.env.production` files
+   - Zero configuration for team members
+
+6. **🔄 Shared Design System** - True single source of truth
+   - Design system defined in host application
+   - Consumed by chat and email via Vite aliases
+   - TypeScript interfaces exported for type safety
+   - Consistent UI across all micro-frontends
 
 ## What This Project Does
 
-This is a proof-of-concept that shows how to build scalable front-end applications using a micro-frontend approach. Instead of one large monolithic app, we have three independent applications:
+This is a **production-ready** micro-frontend architecture with three fully independent TypeScript applications:
 
-- **Host Application** - Main dashboard and design system showcase
-- **Chat Application** - Messaging interface with conversations
-- **Email Application** - Email client with inbox and compose features
+- **Host Application** - Main dashboard, design system docs, notification system, iframe embedding
+- **Chat Application** - Messaging interface consuming shared design system
+- **Email Application** - Email client consuming shared design system
 
 Each application runs independently and can be developed, tested, and deployed separately.
 
@@ -139,6 +180,51 @@ All apps use a shared design system to maintain visual consistency. The system i
 
 The design system uses CSS custom properties, making it easy to theme and customize.
 
+## Using Professional Features
+
+### 1. Design System Documentation
+
+Access the interactive design system documentation:
+1. Open the host app (`http://localhost:5174`)
+2. Click **"Design System Docs"** in the header navigation
+3. Browse all components with live previews
+4. Click the 📋 icon to copy code snippets
+5. Review TypeScript prop tables for each component
+
+### 2. Iframe Embedding Mode
+
+Open micro-frontends within the host application:
+1. Click **"Open in Modal (iframe)"** on any micro-frontend card
+2. The app loads in a full-screen modal with iframe
+3. Test postMessage communication with **"Send Test Message"** button
+4. View communication logs at the bottom of the modal
+5. Close with the ✕ button or click outside
+
+### 3. EventBus Notifications
+
+Watch real-time notifications for micro-frontend events:
+1. Open or close micro-frontends (in modal or new tab)
+2. Notifications appear in the top-right corner
+3. The status bar shows active micro-frontends and open counts
+4. Click **"Test EventBus"** to send a custom notification
+5. All notifications auto-dismiss after 5 seconds
+
+### 4. PostMessage Communication
+
+The iframe modal demonstrates cross-origin communication:
+- **Automatic**: Host sends connection message when iframe loads
+- **Manual**: Click "Send Test Message" to send custom messages
+- **Logging**: All messages are logged in the modal footer
+- **Extensible**: Add custom message handlers in `MicroFrontendModal.tsx`
+
+Example message format:
+```typescript
+window.postMessage({
+  type: 'USER_ACTION',
+  payload: { action: 'click', target: 'button' }
+}, '*');
+```
+
 ## Running the Applications
 
 ### All Together (Recommended)
@@ -222,12 +308,24 @@ Each app gets its own URL. Update the button URLs in the host app to point to pr
 
 ## Technology Stack
 
-- **React 18** - UI library
+- **React 18** - UI library with hooks and functional components
+- **TypeScript** - Full type safety with interfaces and type declarations
 - **Vite 5** - Build tool (fast HMR, modern ESM)
 - **Concurrently** - Run multiple dev servers
 - **CSS Custom Properties** - Theming system
+- **PostMessage API** - Cross-origin communication for iframe embedding
+- **EventBus Pattern** - Pub/sub messaging for decoupled app communication
 
 ## Design Decisions
+
+### Why TypeScript?
+
+TypeScript was chosen to provide:
+- **Type Safety** - Catch errors at compile time, not runtime
+- **Better DX** - Excellent IDE autocomplete and intellisense
+- **Self-Documenting Code** - Interfaces serve as inline documentation
+- **Scalability** - Easier to refactor and maintain as the codebase grows
+- **Professional Standard** - Industry best practice for modern React applications
 
 ### Why Not Module Federation?
 
@@ -245,10 +343,28 @@ Using different ports for local development makes it easy to understand the boun
 
 ### Communication Strategy
 
-Currently using browser navigation (window.open). Could be extended with:
-- iframes + postMessage for embedded experiences
+This project implements multiple communication strategies:
+
+**1. Browser Navigation (window.open)**
+- Opens micro-frontends in new tabs
+- Simplest approach for independent apps
+- EventBus tracks when apps are opened/closed
+
+**2. Iframe + PostMessage (Implemented)**
+- Embeds micro-frontends within host application
+- Cross-origin communication via postMessage API
+- Message logging for debugging
+- Lazy-loaded on demand
+
+**3. EventBus Pub/Sub (Implemented)**
+- Decoupled event-driven communication
+- Host app tracks micro-frontend lifecycle events
+- Real-time notifications for user feedback
+- Extensible for custom events
+
+Could be further extended with:
 - localStorage/sessionStorage for shared state
-- Dedicated event bus for cross-app communication
+- WebSockets for real-time bidirectional communication
 
 ## Scaling This Architecture
 
@@ -261,9 +377,22 @@ Currently using browser navigation (window.open). Could be extended with:
 
 Takes about 10 minutes to scaffold a new micro-frontend.
 
-### Production Improvements
+### Implemented Production Features
 
-For a production system, consider:
+This POC already includes several production-ready features:
+
+**✅ TypeScript** - Full type safety across all applications
+**✅ Environment Configuration** - Automatic URL switching between dev and production
+**✅ EventBus Communication** - Pub/sub pattern for decoupled messaging
+**✅ Iframe Embedding** - Lazy-loaded micro-frontends with postMessage
+**✅ Component Documentation** - Interactive Storybook-like showcase
+**✅ Notification System** - Real-time user feedback
+**✅ Professional UI** - Polished design with animations and transitions
+**✅ Responsive Design** - Mobile-friendly layouts
+
+### Additional Production Improvements
+
+For a full production system, consider:
 
 **1. Shared Design System as NPM Package**
 
@@ -301,10 +430,11 @@ import { Button, Card } from '@company/design-system';
 
 - **Authentication** - Shared auth via JWT in cookies/localStorage
 - **Error boundaries** - Graceful handling of micro-frontend failures
-- **Monitoring** - Track performance and errors per micro-frontend
+- **Monitoring** - Track performance and errors per micro-frontend (e.g., Sentry)
 - **CI/CD** - Automated testing and deployment pipelines
-- **TypeScript** - Type safety across boundaries
-- **Testing** - Unit, integration, and E2E test suites
+- **Testing** - Unit, integration, and E2E test suites (Jest, React Testing Library, Playwright)
+- **Code Splitting** - Further optimize bundle sizes with React.lazy
+- **Service Workers** - Offline support and caching strategies
 
 ## Troubleshooting
 
@@ -330,15 +460,19 @@ Ensure all three dev servers are running. Check the terminal for errors.
 
 ## Future Enhancements
 
-Some ideas for extending this POC:
+Some ideas for extending this POC further:
 
+- ✅ ~~Implement cross-app messaging with postMessage~~ (Completed)
+- ✅ ~~Build notification system that works across apps~~ (Completed via EventBus)
+- ✅ ~~Implement lazy loading for micro-frontends~~ (Completed via iframe modal)
 - Add React Router to each app for internal navigation
-- Implement cross-app messaging with postMessage
-- Add authentication flow
-- Create shared state management
-- Build notification system that works across apps
-- Add real backend integration
-- Implement lazy loading for micro-frontends
+- Add authentication flow with JWT tokens
+- Create shared state management (Redux, Zustand, or Jotai)
+- Add real backend integration with REST/GraphQL APIs
+- Implement WebSocket connections for real-time features
+- Add unit and E2E testing with Jest and Playwright
+- Implement error boundaries for graceful failure handling
+- Add performance monitoring and analytics
 
 ## Notes
 

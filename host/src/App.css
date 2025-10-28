@@ -10,11 +10,15 @@
   color: white;
   padding: var(--spacing-xl) var(--spacing-2xl);
   box-shadow: var(--shadow-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--spacing-lg);
 }
 
 .app-header__content {
-  max-width: 1200px;
-  margin: 0 auto;
+  flex: 1;
 }
 
 .app-header__title {
@@ -25,6 +29,11 @@
 .app-header__subtitle {
   font-size: var(--font-size-base);
   opacity: 0.9;
+}
+
+.app-header__nav {
+  display: flex;
+  gap: var(--spacing-sm);
 }
 
 /* Navigation */
@@ -145,6 +154,40 @@
   }
 }
 
+/* Feature Items */
+.feature-item {
+  padding: var(--spacing-lg);
+  background: var(--gray-50);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--gray-200);
+  transition: all 0.3s ease;
+}
+
+.feature-item:hover {
+  border-color: var(--primary-color);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.feature-icon {
+  font-size: 2.5rem;
+  margin-bottom: var(--spacing-md);
+}
+
+.feature-item h4 {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--gray-900);
+  margin-bottom: var(--spacing-sm);
+}
+
+.feature-item p {
+  font-size: 0.875rem;
+  color: var(--gray-600);
+  line-height: 1.6;
+  margin-bottom: var(--spacing-md);
+}
+
 /* Footer */
 .app-footer {
   background-color: var(--gray-800);
@@ -160,9 +203,9 @@
 .app-footer__tech {
   display: flex;
   justify-content: center;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-sm);
+  flex-wrap: wrap;
   font-size: var(--font-size-sm);
-  opacity: 0.8;
 }
 
 /* Responsive */

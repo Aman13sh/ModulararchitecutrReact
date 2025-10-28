@@ -2,8 +2,21 @@ import React, { useState } from 'react';
 import { Button, Card, Input, Badge } from 'host';
 import './App.css';
 
+// Email interface
+interface Email {
+  id: number;
+  from: string;
+  subject: string;
+  preview: string;
+  time: string;
+  isRead: boolean;
+  isStarred: boolean;
+  category: string;
+  body: string;
+}
+
 // Mock email data
-const initialEmails = [
+const initialEmails: Email[] = [
   {
     id: 1,
     from: 'john.doe@company.com',
@@ -62,15 +75,15 @@ const initialEmails = [
 ];
 
 function EmailApp() {
-  const [emails, setEmails] = useState(initialEmails);
-  const [selectedEmail, setSelectedEmail] = useState(null);
-  const [filter, setFilter] = useState('all');
+  const [emails, setEmails] = useState<Email[]>(initialEmails);
+  const [selectedEmail, setSelectedEmail] = useState<Email | null>(null);
+  const [filter, setFilter] = useState<'all' | 'unread' | 'starred'>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [isComposing, setIsComposing] = useState(false);
   const [composeForm, setComposeForm] = useState({ to: '', subject: '', body: '' });
 
 
-  const handleEmailClick = (email) => {
+  const handleEmailClick = (email: Email) => {
     setSelectedEmail(email);
     setIsComposing(false);
 
@@ -82,7 +95,7 @@ function EmailApp() {
     }
   };
 
-  const handleStarToggle = (emailId, e) => {
+  const handleStarToggle = (emailId: number, e: React.MouseEvent) => {
     e.stopPropagation();
     setEmails(prev => prev.map(email =>
       email.id === emailId ? { ...email, isStarred: !email.isStarred } : email
@@ -216,7 +229,7 @@ function EmailApp() {
                       placeholder="Write your message..."
                       value={composeForm.body}
                       onChange={(e) => setComposeForm({...composeForm, body: e.target.value})}
-                      rows="10"
+                      rows={10}
                     />
                   </div>
                   <div className="compose-actions">

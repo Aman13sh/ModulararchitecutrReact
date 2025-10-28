@@ -1,10 +1,45 @@
-import React from 'react';
+import { useState } from 'react';
 import './App.css';
-import { Button, Card, Input, Badge } from './designSystem';
+import { Button, Card, Badge } from './designSystem';
+import eventBus from './designSystem/eventBus';
+import DesignSystemDocs from './components/DesignSystemDocs';
+import MicroFrontendModal from './components/MicroFrontendModal';
+import NotificationSystem from './components/NotificationSystem';
 
 function App() {
   const chatUrl = import.meta.env.VITE_CHAT_URL || 'http://localhost:5175';
   const emailUrl = import.meta.env.VITE_EMAIL_URL || 'http://localhost:5176';
+
+  const [activeModal, setActiveModal] = useState<'chat' | 'email' | null>(null);
+  const [viewMode, setViewMode] = useState<'overview' | 'docs'>('overview');
+
+  const handleOpenChat = (embedded: boolean = false) => {
+    if (embedded) {
+      setActiveModal('chat');
+      eventBus.emit('chat:opened');
+    } else {
+      window.open(chatUrl, '_blank');
+      eventBus.emit('chat:opened');
+    }
+  };
+
+  const handleOpenEmail = (embedded: boolean = false) => {
+    if (embedded) {
+      setActiveModal('email');
+      eventBus.emit('email:opened');
+    } else {
+      window.open(emailUrl, '_blank');
+      eventBus.emit('email:opened');
+    }
+  };
+
+  const handleCloseModal = () => {
+    if (activeModal) {
+      eventBus.emit(`${activeModal}:closed`);
+    }
+    setActiveModal(null);
+  };
+
   return (
     <div className="app">
       {/* Header */}
@@ -12,129 +47,206 @@ function App() {
         <div className="app-header__content">
           <h1 className="app-header__title">Bluebash Micro-Frontend POC</h1>
           <div className="app-header__subtitle">
-            Modular Architecture with Independent React Applications
+            Professional Modular Architecture with TypeScript
           </div>
+        </div>
+        <div className="app-header__nav">
+          <Button
+            variant={viewMode === 'overview' ? 'primary' : 'outline'}
+            onClick={() => setViewMode('overview')}
+            size="small"
+          >
+            Overview
+          </Button>
+          <Button
+            variant={viewMode === 'docs' ? 'primary' : 'outline'}
+            onClick={() => setViewMode('docs')}
+            size="small"
+          >
+            Design System Docs
+          </Button>
         </div>
       </header>
 
       {/* Main Content */}
       <main className="app-main">
-        <Card title="Welcome to the Micro-Frontend Architecture Demo">
-          <p style={{ marginBottom: '20px', lineHeight: '1.6' }}>
-            This project demonstrates a micro-frontend architecture with three independent applications.
-            Each application runs on its own port and can be developed, deployed, and scaled independently.
-          </p>
+        {/* Notification System */}
+        <NotificationSystem />
 
-          <div style={{ display: 'flex', gap: '20px', marginBottom: '30px', flexWrap: 'wrap' }}>
-            <div style={{ flex: 1, minWidth: '250px' }}>
-              <Card hoverable>
-                <h3 style={{ marginBottom: '10px' }}>💬 Chat Application</h3>
-                <p style={{ marginBottom: '15px', color: '#6b7280' }}>
-                  Real-time messaging interface with conversations, search, and notifications.
-                </p>
-                <div style={{ marginTop: '15px' }}>
-                  <Button
-                    variant="primary"
-                    fullWidth
-                    onClick={() => window.open(chatUrl, '_blank')}
-                  >
-                    Open Chat App →
-                  </Button>
+        {viewMode === 'overview' ? (
+          <>
+            {/* Welcome Section */}
+            <Card title="Welcome to the Micro-Frontend Architecture Demo">
+              <p style={{ marginBottom: '20px', lineHeight: '1.6' }}>
+                This project demonstrates a professional micro-frontend architecture with three independent
+                TypeScript applications. Features include EventBus communication, iframe embedding with
+                postMessage, and a complete design system documentation.
+              </p>
+
+              <div style={{ display: 'flex', gap: '20px', marginBottom: '30px', flexWrap: 'wrap' }}>
+                {/* Chat Card */}
+                <div style={{ flex: 1, minWidth: '250px' }}>
+                  <Card hoverable>
+                    <h3 style={{ marginBottom: '10px' }}>💬 Chat Application</h3>
+                    <p style={{ marginBottom: '15px', color: '#6b7280' }}>
+                      Real-time messaging interface with conversations, search, and notifications.
+                    </p>
+                    <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
+                      <Button
+                        variant="primary"
+                        fullWidth
+                        onClick={() => handleOpenChat(true)}
+                      >
+                        Open in Modal (iframe)
+                      </Button>
+                      <Button
+                        variant="outline"
+                        fullWidth
+                        onClick={() => handleOpenChat(false)}
+                      >
+                        Open in New Tab
+                      </Button>
+                    </div>
+                  </Card>
                 </div>
-              </Card>
-            </div>
 
-            <div style={{ flex: 1, minWidth: '250px' }}>
-              <Card hoverable>
-                <h3 style={{ marginBottom: '10px' }}>📧 Email Application</h3>
-                <p style={{ marginBottom: '15px', color: '#6b7280' }}>
-                  Full-featured email client with inbox, compose, and filtering capabilities.
-                </p>
-                <div style={{ marginTop: '15px' }}>
-                  <Button
-                    variant="primary"
-                    fullWidth
-                    onClick={() => window.open(emailUrl, '_blank')}
-                  >
-                    Open Email App →
-                  </Button>
+                {/* Email Card */}
+                <div style={{ flex: 1, minWidth: '250px' }}>
+                  <Card hoverable>
+                    <h3 style={{ marginBottom: '10px' }}>📧 Email Application</h3>
+                    <p style={{ marginBottom: '15px', color: '#6b7280' }}>
+                      Full-featured email client with inbox, compose, and filtering capabilities.
+                    </p>
+                    <div style={{ display: 'flex', gap: '10px', flexDirection: 'column' }}>
+                      <Button
+                        variant="primary"
+                        fullWidth
+                        onClick={() => handleOpenEmail(true)}
+                      >
+                        Open in Modal (iframe)
+                      </Button>
+                      <Button
+                        variant="outline"
+                        fullWidth
+                        onClick={() => handleOpenEmail(false)}
+                      >
+                        Open in New Tab
+                      </Button>
+                    </div>
+                  </Card>
                 </div>
-              </Card>
-            </div>
-          </div>
-        </Card>
-
-        <Card title="Shared Design System Components">
-          <p style={{ marginBottom: '20px' }}>
-            All micro-frontends use the same design system to ensure consistency. Here are some examples:
-          </p>
-
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '25px' }}>
-            {/* Buttons */}
-            <div>
-              <h4 style={{ marginBottom: '10px' }}>Buttons</h4>
-              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap' }}>
-                <Button variant="primary">Primary</Button>
-                <Button variant="secondary">Secondary</Button>
-                <Button variant="success">Success</Button>
-                <Button variant="danger">Danger</Button>
-                <Button variant="outline">Outline</Button>
               </div>
-            </div>
 
-            {/* Badges */}
-            <div>
-              <h4 style={{ marginBottom: '10px' }}>Badges</h4>
-              <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', alignItems: 'center' }}>
-                <Badge variant="default">Default</Badge>
-                <Badge variant="primary">Primary</Badge>
-                <Badge variant="success">Success</Badge>
-                <Badge variant="danger">Danger</Badge>
-                <Badge variant="warning">Warning</Badge>
+              <div style={{
+                background: '#f0f9ff',
+                padding: '16px',
+                borderRadius: '8px',
+                border: '1px solid #bfdbfe'
+              }}>
+                <p style={{ margin: 0, fontSize: '0.875rem', color: '#1e40af' }}>
+                  <strong>💡 Pro Tip:</strong> Click "Open in Modal" to see iframe embedding with postMessage
+                  communication. Watch the notification system track app opens/closes via EventBus!
+                </p>
               </div>
-            </div>
+            </Card>
 
-            {/* Input */}
-            <div>
-              <h4 style={{ marginBottom: '10px' }}>Input Fields</h4>
-              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '15px' }}>
-                <Input label="Email" placeholder="Enter your email" />
-                <Input label="Password" type="password" placeholder="Enter password" />
-                <Input label="With Error" error="This field is required" />
+            {/* Features Section */}
+            <Card title="🚀 Professional Features Implemented">
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
+                <div className="feature-item">
+                  <div className="feature-icon">🎨</div>
+                  <h4>Design System Docs</h4>
+                  <p>Storybook-like component showcase with live examples, prop tables, and copy-to-clipboard code snippets.</p>
+                  <Badge variant="success">Interactive</Badge>
+                </div>
+
+                <div className="feature-item">
+                  <div className="feature-icon">🔔</div>
+                  <h4>EventBus Notifications</h4>
+                  <p>Real-time notifications using pub/sub pattern. Track micro-frontend opens, closes, and custom events.</p>
+                  <Badge variant="primary">Live Updates</Badge>
+                </div>
+
+                <div className="feature-item">
+                  <div className="feature-icon">🖼️</div>
+                  <h4>Iframe Embedding</h4>
+                  <p>Lazy-loaded micro-frontends in modals with postMessage for cross-origin communication.</p>
+                  <Badge variant="secondary">PostMessage</Badge>
+                </div>
+
+                <div className="feature-item">
+                  <div className="feature-icon">📘</div>
+                  <h4>TypeScript</h4>
+                  <p>Fully typed application with interfaces, type safety, and excellent IDE support.</p>
+                  <Badge variant="success">Type-Safe</Badge>
+                </div>
+
+                <div className="feature-item">
+                  <div className="feature-icon">⚙️</div>
+                  <h4>Environment Config</h4>
+                  <p>Smart URL routing based on environment (localhost in dev, Vercel URLs in production).</p>
+                  <Badge variant="warning">Auto-Switch</Badge>
+                </div>
+
+                <div className="feature-item">
+                  <div className="feature-icon">🔄</div>
+                  <h4>Shared Design System</h4>
+                  <p>Single source of truth for UI components consumed by all micro-frontends via Vite aliases.</p>
+                  <Badge variant="primary">Consistent</Badge>
+                </div>
               </div>
-            </div>
-          </div>
-        </Card>
+            </Card>
 
-        <Card title="Architecture Overview">
-          <div style={{ backgroundColor: '#f9fafb', padding: '20px', borderRadius: '8px', fontFamily: 'monospace', fontSize: '14px', lineHeight: '1.8' }}>
-            <div>📦 <strong>Host Application</strong></div>
-            <div style={{ paddingLeft: '20px' }}>├─ Design System & Shared Components</div>
-            <div style={{ paddingLeft: '20px' }}>├─ Documentation & Demo</div>
-            <div style={{ paddingLeft: '20px' }}>└─ Links to Micro-Frontends</div>
-            <br />
-            <div>💬 <strong>Chat Micro-Frontend</strong></div>
-            <div style={{ paddingLeft: '20px' }}>├─ Independent React App</div>
-            <div style={{ paddingLeft: '20px' }}>├─ Consumes Design System from Host</div>
-            <div style={{ paddingLeft: '20px' }}>└─ Chat Features & State</div>
-            <br />
-            <div>📧 <strong>Email Micro-Frontend</strong></div>
-            <div style={{ paddingLeft: '20px' }}>├─ Independent React App</div>
-            <div style={{ paddingLeft: '20px' }}>├─ Consumes Design System from Host</div>
-            <div style={{ paddingLeft: '20px' }}>└─ Email Features & State</div>
-          </div>
-        </Card>
+            {/* Architecture Overview */}
+            <Card title="Architecture Overview">
+              <div style={{ backgroundColor: '#f9fafb', padding: '20px', borderRadius: '8px', fontFamily: 'monospace', fontSize: '14px', lineHeight: '1.8' }}>
+                <div>📦 <strong>Host Application</strong></div>
+                <div style={{ paddingLeft: '20px' }}>├─ Design System (Single Source of Truth)</div>
+                <div style={{ paddingLeft: '20px' }}>├─ EventBus (Pub/Sub Communication)</div>
+                <div style={{ paddingLeft: '20px' }}>├─ Notification System</div>
+                <div style={{ paddingLeft: '20px' }}>├─ Iframe Modal (Lazy Loading)</div>
+                <div style={{ paddingLeft: '20px' }}>└─ Design System Documentation</div>
+                <br />
+                <div>💬 <strong>Chat Micro-Frontend</strong></div>
+                <div style={{ paddingLeft: '20px' }}>├─ Independent TypeScript React App</div>
+                <div style={{ paddingLeft: '20px' }}>├─ Consumes Design System from Host</div>
+                <div style={{ paddingLeft: '20px' }}>├─ PostMessage Communication Ready</div>
+                <div style={{ paddingLeft: '20px' }}>└─ Standalone & Embeddable</div>
+                <br />
+                <div>📧 <strong>Email Micro-Frontend</strong></div>
+                <div style={{ paddingLeft: '20px' }}>├─ Independent TypeScript React App</div>
+                <div style={{ paddingLeft: '20px' }}>├─ Consumes Design System from Host</div>
+                <div style={{ paddingLeft: '20px' }}>├─ PostMessage Communication Ready</div>
+                <div style={{ paddingLeft: '20px' }}>└─ Standalone & Embeddable</div>
+              </div>
+            </Card>
+          </>
+        ) : (
+          <DesignSystemDocs />
+        )}
       </main>
 
       {/* Footer */}
       <footer className="app-footer">
-        <p>Built with React + Vite</p>
+        <p>Built with React + TypeScript + Vite</p>
         <p className="app-footer__tech">
-          <span>Host: modulararchitecutr-react.vercel.app</span>
-          <span>Chat: chat-seven-psi-63.vercel.app</span>
-          <span>Email: mail-sable.vercel.app</span>
+          <Badge variant="primary">TypeScript</Badge>
+          <Badge variant="success">React 18</Badge>
+          <Badge variant="secondary">Vite 5</Badge>
+          <Badge variant="warning">Micro-Frontends</Badge>
         </p>
       </footer>
+
+      {/* Micro-Frontend Modal */}
+      {activeModal && (
+        <MicroFrontendModal
+          isOpen={true}
+          onClose={handleCloseModal}
+          url={activeModal === 'chat' ? chatUrl : emailUrl}
+          title={activeModal === 'chat' ? 'Chat Application' : 'Email Application'}
+          app={activeModal}
+        />
+      )}
     </div>
   );
 }
