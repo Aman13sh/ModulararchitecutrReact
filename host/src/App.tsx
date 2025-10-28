@@ -11,7 +11,7 @@ import {
   MdLightbulb,
   MdRocket,
   MdPalette,
-  // MdNotifications,
+  MdNotifications,
   MdViewQuilt,
   MdCode,
   MdSettings,
@@ -191,25 +191,25 @@ function App() {
                   <Badge variant="success">Interactive</Badge>
                 </div>
 
-                {/* <div className="feature-item">
+                <div className="feature-item">
                   <div className="feature-icon"><MdNotifications size={24} /></div>
                   <h4>EventBus Notifications</h4>
                   <p>Real-time notifications using pub/sub pattern. Track micro-frontend opens, closes, and custom events.</p>
                   <Badge variant="primary">Live Updates</Badge>
-                </div> */}
+                </div>
 
                 <div className="feature-item">
                   <div className="feature-icon"><MdViewQuilt size={24} /></div>
                   <h4>Module Federation</h4>
                   <p>Runtime micro-frontend loading using Webpack Module Federation for seamless integration.</p>
-                  <Badge variant="secondary">Dynamic Modules</Badge>
+                  <Badge variant="primary">Dynamic Modules</Badge>
                 </div>
 
                 <div className="feature-item">
                   <div className="feature-icon"><MdCode size={24} /></div>
                   <h4>TypeScript</h4>
                   <p>Fully typed application with interfaces, type safety, and excellent IDE support.</p>
-                  <Badge variant="success">Type-Safe</Badge>
+                  <Badge variant="primary">Type-Safe</Badge>
                 </div>
 
                 <div className="feature-item">
@@ -269,7 +269,7 @@ function App() {
         <p className="app-footer__tech">
           <Badge variant="primary">TypeScript</Badge>
           <Badge variant="success">React 18</Badge>
-          <Badge variant="secondary">Vite 5</Badge>
+          <Badge variant="primary">Vite 5</Badge>
           <Badge variant="warning">Micro-Frontends</Badge>
         </p>
       </footer>

@@ -31,3 +31,8 @@
   background-color: var(--warning-color);
   color: white;
 }
+
+.ds-badge--secondary {
+  background-color: var(--secondary-color);
+  color: white;
+}
