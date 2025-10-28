@@ -39,34 +39,66 @@ A production-ready micro-frontend architecture using **React + TypeScript + Webp
 - Node.js 16+
 - npm or yarn
 
-### Local Development
+### Local Development (Preview Mode)
+
+Module Federation requires **preview mode** to work. Follow these steps:
 
 ```bash
-# 1. Install dependencies
+# 1. Install dependencies for all apps
 npm run install:all
 
-# 2. Build all apps (required for Module Federation)
+# 2. Build all apps (generates remoteEntry.js files)
 npm run build
 
 # 3. Start preview servers
 npm run preview
 ```
 
-Open http://localhost:5174
+**Access the apps:**
+- HOST: http://localhost:5174/ (Main application with Module Federation)
+- CHAT: http://localhost:5175/ (Standalone chat app)
+- EMAIL: http://localhost:5176/ (Standalone email app)
 
-**Important:** Module Federation requires **preview mode** (not dev mode) due to `@originjs/vite-plugin-federation` limitations. Dev mode doesn't generate the required `remoteEntry.js` files.
+**Important Notes:**
+- Preview mode uses **localhost URLs** (`.env.development` files)
+- Module Federation dynamically loads CHAT and EMAIL apps from localhost
+- Dev mode (`npm run dev`) **does NOT work** with Module Federation because it doesn't generate `remoteEntry.js` files
 
-### Making Changes
+### Making Changes During Development
 
 ```bash
-# Edit files
+# 1. Edit files
 vim host/src/App.tsx
 
-# Rebuild the specific app
+# 2. Rebuild the specific app
 cd host && npm run build
 
-# Refresh browser
+# 3. Preview server auto-serves new build - just refresh browser (Cmd+Shift+R)
 ```
+
+### Production Build & Deployment
+
+For Vercel deployment with **production URLs**:
+
+```bash
+# 1. Ensure .env.production files exist with Vercel URLs
+# host/.env.production
+VITE_CHAT_URL=https://chat-seven-psi-63.vercel.app
+VITE_EMAIL_URL=https://mail-sable.vercel.app
+
+# chat/.env.production & email/.env.production
+VITE_HOST_URL=https://modulararchitecutr-react.vercel.app
+
+# 2. Build all apps for production
+npm run build
+
+# 3. Commit and push to deploy
+git add .
+git commit -m "Deploy changes"
+git push
+```
+
+Vercel will automatically deploy each app to its respective URL.
 
 ## 📦 Project Structure
 

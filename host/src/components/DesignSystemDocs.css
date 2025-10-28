@@ -176,15 +176,49 @@
 }
 
 @media (max-width: 768px) {
+  .component-title {
+    font-size: 1.25rem;
+  }
+
+  .component-icon {
+    font-size: 1.5rem;
+  }
+
   .variants-grid {
     grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+
+  .variant-card {
+    padding: var(--spacing-md);
+  }
+
+  .variant-code {
+    font-size: 0.7rem;
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
+
+  .copy-button {
+    font-size: 0.75rem;
+    padding: 2px 6px;
   }
 
   .props-table {
     overflow-x: auto;
+    padding: var(--spacing-md);
   }
 
   .props-table table {
     min-width: 600px;
+  }
+
+  .props-table th,
+  .props-table td {
+    padding: var(--spacing-xs) var(--spacing-sm);
+    font-size: 0.8125rem;
+  }
+
+  .docs-footer {
+    justify-content: center;
   }
 }
