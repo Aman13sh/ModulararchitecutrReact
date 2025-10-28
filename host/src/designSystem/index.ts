@@ -1,22 +1,9 @@
 // Design System - Main Export File
 import './styles.css';
-import Button from './components/Button';
-import Card from './components/Card';
-import Input from './components/Input';
-import Badge from './components/Badge';
-import eventBus from './eventBus';
 
-// Export types
-export type { ButtonProps } from './components/Button';
-export type { CardProps } from './components/Card';
-export type { InputProps } from './components/Input';
-export type { BadgeProps } from './components/Badge';
+// Export all components and types
+export { Button, Card, Input, Badge } from './components';
+export type { ButtonProps, CardProps, InputProps, BadgeProps } from './components';
 
-// Export components and eventBus instance
-export {
-  Button,
-  Card,
-  Input,
-  Badge,
-  eventBus
-};
+// Export eventBus
+export { default as eventBus } from './eventBus';

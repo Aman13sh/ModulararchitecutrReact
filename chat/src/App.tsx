@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button, Card, Input, Badge } from 'host';
 import './App.css';
 import { MdPerson, MdGroup } from 'react-icons/md';
@@ -64,6 +64,51 @@ function ChatApp() {
   const [messages, setMessages] = useState<MessagesMap>(initialMessages);
   const [newMessage, setNewMessage] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState<string>('');
+  const [isEmbedded, setIsEmbedded] = useState(false);
+
+  // Check if running inside iframe
+  useEffect(() => {
+    setIsEmbedded(window.self !== window.top);
+  }, []);
+
+  // PostMessage: Listen for messages from HOST
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      // Security: In production, verify event.origin
+      // if (event.origin !== 'https://host-app.vercel.app') return;
+
+      if (event.data && event.data.type) {
+        console.log('[CHAT] Received message from HOST:', event.data);
+
+        switch (event.data.type) {
+          case 'HOST_CONNECTED':
+            console.log('[CHAT] Connected to HOST:', event.data.payload);
+            // Acknowledge connection
+            if (isEmbedded && window.parent) {
+              window.parent.postMessage(
+                {
+                  type: 'APP_LOADED',
+                  payload: { app: 'chat', timestamp: new Date().toISOString() }
+                },
+                '*' // In production: use specific origin
+              );
+            }
+            break;
+          case 'TEST_MESSAGE':
+            console.log('[CHAT] Test message received:', event.data.payload);
+            break;
+          default:
+            console.log('[CHAT] Unknown message type:', event.data.type);
+        }
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, [isEmbedded]);
 
   // Helper function to render avatar icons
   const renderAvatar = (avatarType: Conversation['avatar']) => {
@@ -71,6 +116,24 @@ function ChatApp() {
       return <MdGroup size={20} />;
     }
     return <MdPerson size={20} />;
+  };
+
+  // Send message to HOST when user sends a chat message
+  const notifyHostOfAction = (action: string, data?: any) => {
+    if (isEmbedded && window.parent) {
+      window.parent.postMessage(
+        {
+          type: 'USER_ACTION',
+          payload: {
+            app: 'chat',
+            action,
+            data,
+            timestamp: new Date().toISOString()
+          }
+        },
+        '*' // In production: use specific origin
+      );
+    }
   };
 
   const handleSendMessage = () => {
@@ -96,6 +159,12 @@ function ChatApp() {
       ));
 
       setNewMessage('');
+
+      // Notify HOST about the message
+      notifyHostOfAction('message_sent', {
+        conversationId: selectedConversation,
+        message: newMessage
+      });
     }
   };
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button, Card, Input, Badge } from 'host';
 import './App.css';
 import { MdMail, MdInbox, MdMarkunread, MdStar, MdStarBorder } from 'react-icons/md';
@@ -82,7 +82,69 @@ function EmailApp() {
   const [searchQuery, setSearchQuery] = useState('');
   const [isComposing, setIsComposing] = useState(false);
   const [composeForm, setComposeForm] = useState({ to: '', subject: '', body: '' });
+  const [isEmbedded, setIsEmbedded] = useState(false);
 
+  // Check if running inside iframe
+  useEffect(() => {
+    setIsEmbedded(window.self !== window.top);
+  }, []);
+
+  // PostMessage: Listen for messages from HOST
+  useEffect(() => {
+    const handleMessage = (event: MessageEvent) => {
+      // Security: In production, verify event.origin
+      // if (event.origin !== 'https://host-app.vercel.app') return;
+
+      if (event.data && event.data.type) {
+        console.log('[EMAIL] Received message from HOST:', event.data);
+
+        switch (event.data.type) {
+          case 'HOST_CONNECTED':
+            console.log('[EMAIL] Connected to HOST:', event.data.payload);
+            // Acknowledge connection
+            if (isEmbedded && window.parent) {
+              window.parent.postMessage(
+                {
+                  type: 'APP_LOADED',
+                  payload: { app: 'email', timestamp: new Date().toISOString() }
+                },
+                '*' // In production: use specific origin
+              );
+            }
+            break;
+          case 'TEST_MESSAGE':
+            console.log('[EMAIL] Test message received:', event.data.payload);
+            break;
+          default:
+            console.log('[EMAIL] Unknown message type:', event.data.type);
+        }
+      }
+    };
+
+    window.addEventListener('message', handleMessage);
+
+    return () => {
+      window.removeEventListener('message', handleMessage);
+    };
+  }, [isEmbedded]);
+
+  // Send message to HOST when user performs actions
+  const notifyHostOfAction = (action: string, data?: any) => {
+    if (isEmbedded && window.parent) {
+      window.parent.postMessage(
+        {
+          type: 'USER_ACTION',
+          payload: {
+            app: 'email',
+            action,
+            data,
+            timestamp: new Date().toISOString()
+          }
+        },
+        '*' // In production: use specific origin
+      );
+    }
+  };
 
   const handleEmailClick = (email: Email) => {
     setSelectedEmail(email);
@@ -93,14 +155,25 @@ function EmailApp() {
       setEmails(prev => prev.map(e =>
         e.id === email.id ? { ...e, isRead: true } : e
       ));
+      // Notify HOST
+      notifyHostOfAction('email_read', { emailId: email.id, subject: email.subject });
     }
   };
 
   const handleStarToggle = (emailId: number, e: React.MouseEvent) => {
     e.stopPropagation();
+    const email = emails.find(e => e.id === emailId);
     setEmails(prev => prev.map(email =>
       email.id === emailId ? { ...email, isStarred: !email.isStarred } : email
     ));
+    // Notify HOST
+    if (email) {
+      notifyHostOfAction('email_starred', {
+        emailId,
+        starred: !email.isStarred,
+        subject: email.subject
+      });
+    }
   };
 
   const handleCompose = () => {
@@ -111,6 +184,12 @@ function EmailApp() {
 
   const handleSendEmail = () => {
     if (composeForm.to && composeForm.subject) {
+      // Notify HOST
+      notifyHostOfAction('email_sent', {
+        to: composeForm.to,
+        subject: composeForm.subject
+      });
+
       alert(`Email sent to ${composeForm.to}!`);
       setIsComposing(false);
       setComposeForm({ to: '', subject: '', body: '' });

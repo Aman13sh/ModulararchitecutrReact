@@ -1,4 +1,4 @@
-// Event Bus for Communication Between Micro-Frontends
+
 
 type EventCallback<T = any> = (data: T) => void;
 type UnsubscribeFn = () => void;
@@ -42,7 +42,6 @@ class EventBus {
   }
 }
 
-// Create singleton instance
 const eventBus = new EventBus();
 
 export default eventBus;

@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import './MicroFrontendModal.css';
 import { MdChat, MdEmail, MdClose } from 'react-icons/md';
+import eventBus from '../designSystem/eventBus';
 
 interface MicroFrontendModalProps {
   isOpen: boolean;
@@ -65,13 +66,38 @@ const MicroFrontendModal: React.FC<MicroFrontendModalProps> = ({
         // Handle different message types
         switch (event.data.type) {
           case 'APP_LOADED':
-            console.log(`${app} app loaded successfully`);
+            console.log(`[HOST] ${app} app loaded successfully`);
+            // Emit EventBus notification
+            eventBus.emit('notification', {
+              message: `${app.toUpperCase()} application loaded successfully`,
+              type: 'success'
+            });
             break;
           case 'USER_ACTION':
-            console.log(`User performed action in ${app}:`, event.data.payload);
+            console.log(`[HOST] User performed action in ${app}:`, event.data.payload);
+            const { action, data } = event.data.payload;
+
+            // Emit EventBus notification based on action
+            let notificationMessage = '';
+            if (action === 'message_sent') {
+              notificationMessage = `Message sent in ${app}: "${data.message}"`;
+            } else if (action === 'email_sent') {
+              notificationMessage = `Email sent to ${data.to}: "${data.subject}"`;
+            } else if (action === 'email_read') {
+              notificationMessage = `Email read: "${data.subject}"`;
+            } else if (action === 'email_starred') {
+              notificationMessage = data.starred ? `Email starred: "${data.subject}"` : `Email unstarred: "${data.subject}"`;
+            } else {
+              notificationMessage = `${app.toUpperCase()}: ${action}`;
+            }
+
+            eventBus.emit('notification', {
+              message: notificationMessage,
+              type: 'info'
+            });
             break;
           default:
-            console.log('Unknown message type:', event.data);
+            console.log('[HOST] Unknown message type:', event.data);
         }
       }
     };

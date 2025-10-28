@@ -138,27 +138,45 @@ Each application:
 │   ├── src/
 │   │   ├── designSystem/   # Design System - Single source of truth
 │   │   │   ├── components/
-│   │   │   │   ├── Button.jsx
-│   │   │   │   ├── Card.jsx
-│   │   │   │   ├── Input.jsx
-│   │   │   │   └── Badge.jsx
+│   │   │   │   ├── Button/
+│   │   │   │   │   ├── Button.tsx
+│   │   │   │   │   ├── Button.css
+│   │   │   │   │   └── index.ts
+│   │   │   │   ├── Card/
+│   │   │   │   │   ├── Card.tsx
+│   │   │   │   │   ├── Card.css
+│   │   │   │   │   └── index.ts
+│   │   │   │   ├── Input/
+│   │   │   │   │   ├── Input.tsx
+│   │   │   │   │   ├── Input.css
+│   │   │   │   │   └── index.ts
+│   │   │   │   ├── Badge/
+│   │   │   │   │   ├── Badge.tsx
+│   │   │   │   │   ├── Badge.css
+│   │   │   │   │   └── index.ts
+│   │   │   │   └── index.ts
+│   │   │   ├── eventBus.ts  # Pub/Sub event system
 │   │   │   ├── styles.css
-│   │   │   └── index.js
-│   │   ├── App.jsx
-│   │   └── main.jsx
-│   └── vite.config.js
+│   │   │   └── index.ts
+│   │   ├── components/
+│   │   │   ├── DesignSystemDocs.tsx  # Interactive documentation
+│   │   │   ├── NotificationSystem.tsx # Real-time notifications
+│   │   │   └── MicroFrontendModal.tsx # Iframe embedding
+│   │   ├── App.tsx
+│   │   └── main.tsx
+│   └── vite.config.ts
 │
 ├── chat/                    # Chat micro-frontend (Port 5175)
 │   ├── src/
-│   │   ├── App.jsx         # Imports design system from 'host'
-│   │   └── main.jsx
-│   └── vite.config.js       # Vite alias: 'host' → '../host/src/designSystem'
+│   │   ├── App.tsx         # Imports design system from 'host' + PostMessage
+│   │   └── main.tsx
+│   └── vite.config.ts       # Vite alias: 'host' → '../host/src/designSystem'
 │
 └── email/                   # Email micro-frontend (Port 5176)
     ├── src/
-    │   ├── App.jsx         # Imports design system from 'host'
-    │   └── main.jsx
-    └── vite.config.js       # Vite alias: 'host' → '../host/src/designSystem'
+    │   ├── App.tsx         # Imports design system from 'host' + PostMessage
+    │   └── main.tsx
+    └── vite.config.ts       # Vite alias: 'host' → '../host/src/designSystem'
 ```
 
 ## Design System
@@ -284,6 +302,11 @@ Each app gets its own URL. Update the button URLs in the host app to point to pr
 - Chat: `yourname-chat.vercel.app`
 - Email: `yourname-email.vercel.app`
 
+## 📚 Documentation
+
+- **[COMMUNICATION.md](./COMMUNICATION.md)** - Comprehensive guide to micro-frontend communication (EventBus + PostMessage)
+- **[DEPLOYMENT_GUIDE.md](./DEPLOYMENT_GUIDE.md)** - Step-by-step Vercel deployment instructions
+
 ## Features
 
 ### Chat Application
@@ -313,8 +336,9 @@ Each app gets its own URL. Update the button URLs in the host app to point to pr
 - **Vite 5** - Build tool (fast HMR, modern ESM)
 - **Concurrently** - Run multiple dev servers
 - **CSS Custom Properties** - Theming system
-- **PostMessage API** - Cross-origin communication for iframe embedding
+- **PostMessage API** - Cross-origin communication for iframe embedding (✅ Bi-directional)
 - **EventBus Pattern** - Pub/sub messaging for decoupled app communication
+- **Material Design Icons** - Professional icon library (react-icons/md)
 
 ## Design Decisions
 
@@ -341,6 +365,13 @@ In production, you'd likely publish the design system as an npm package to avoid
 
 Using different ports for local development makes it easy to understand the boundaries. In production, these map to different domains or subdomains.
 
+**Configured Ports:**
+- **Host**: 5174 (main dashboard)
+- **Chat**: 5175 (messaging app)
+- **Email**: 5176 (email client)
+
+All ports use `strictPort: true` to prevent auto-incrementing and catch conflicts early.
+
 ### Communication Strategy
 
 This project implements multiple communication strategies:
@@ -350,17 +381,20 @@ This project implements multiple communication strategies:
 - Simplest approach for independent apps
 - EventBus tracks when apps are opened/closed
 
-**2. Iframe + PostMessage (Implemented)**
+**2. Iframe + PostMessage (✅ Fully Implemented)**
 - Embeds micro-frontends within host application
-- Cross-origin communication via postMessage API
+- **Bi-directional** communication via postMessage API
 - Message logging for debugging
 - Lazy-loaded on demand
+- **Works on Vercel** (cross-VM communication)
+- **Actions tracked**: message_sent, email_sent, email_read, email_starred
 
-**3. EventBus Pub/Sub (Implemented)**
+**3. EventBus Pub/Sub (✅ Fully Implemented)**
 - Decoupled event-driven communication
 - Host app tracks micro-frontend lifecycle events
 - Real-time notifications for user feedback
 - Extensible for custom events
+- **Integrates with PostMessage** - iframe events trigger EventBus notifications
 
 Could be further extended with:
 - localStorage/sessionStorage for shared state
