@@ -9,7 +9,8 @@ dist/
 build/
 *.local
 
-# Environment variables
+# Environment variables (local overrides only)
+# .env.development and .env.production are committed to the repo
 .env
 .env.local
 .env.development.local

@@ -1,7 +1,14 @@
 import React from 'react';
 import './Card.css';
 
-const Card = ({ children, title, footer, hoverable = false }) => {
+export interface CardProps {
+  children: React.ReactNode;
+  title?: string;
+  footer?: React.ReactNode;
+  hoverable?: boolean;
+}
+
+const Card: React.FC<CardProps> = ({ children, title, footer, hoverable = false }) => {
   return (
     <div className={`ds-card ${hoverable ? 'ds-card--hoverable' : ''}`}>
       {title && <div className="ds-card__header">{title}</div>}

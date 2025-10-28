@@ -1,7 +1,18 @@
 import React from 'react';
 import './Input.css';
 
-const Input = ({
+export interface InputProps {
+  type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
+  placeholder?: string;
+  value?: string;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  label?: string;
+  error?: string;
+  disabled?: boolean;
+  fullWidth?: boolean;
+}
+
+const Input: React.FC<InputProps> = ({
   type = 'text',
   placeholder,
   value,

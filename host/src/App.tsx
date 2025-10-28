@@ -3,6 +3,8 @@ import './App.css';
 import { Button, Card, Input, Badge } from './designSystem';
 
 function App() {
+  const chatUrl = import.meta.env.VITE_CHAT_URL || 'http://localhost:5175';
+  const emailUrl = import.meta.env.VITE_EMAIL_URL || 'http://localhost:5176';
   return (
     <div className="app">
       {/* Header */}
@@ -34,7 +36,7 @@ function App() {
                   <Button
                     variant="primary"
                     fullWidth
-                    onClick={() => window.open('https://chat-seven-psi-63.vercel.app', '_blank')}
+                    onClick={() => window.open(chatUrl, '_blank')}
                   >
                     Open Chat App →
                   </Button>
@@ -52,7 +54,7 @@ function App() {
                   <Button
                     variant="primary"
                     fullWidth
-                    onClick={() => window.open('https://mail-sable.vercel.app', '_blank')}
+                    onClick={() => window.open(emailUrl, '_blank')}
                   >
                     Open Email App →
                   </Button>

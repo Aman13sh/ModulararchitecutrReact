@@ -24,23 +24,46 @@ npm run dev
 
 Open http://localhost:5174 in your browser. You'll see the host application with buttons to open the chat and email apps.
 
+## Environment Configuration
+
+The host application uses environment variables to determine where to redirect to chat and email apps:
+
+**Development** (`.env.development`):
+- Chat: `http://localhost:5175`
+- Email: `http://localhost:5176`
+
+**Production** (`.env.production`):
+- Chat: `https://chat-seven-psi-63.vercel.app`
+- Email: `https://mail-sable.vercel.app`
+
+Vite automatically loads the correct `.env` file based on the mode:
+- `npm run dev` → uses `.env.development`
+- `npm run build` → uses `.env.production`
+
+This means in local development, clicking buttons will open `localhost` URLs, and in production, they'll open your deployed Vercel URLs.
+
+**To customize URLs:**
+1. Edit `host/.env.development` for local development URLs
+2. Edit `host/.env.production` for production deployment URLs
+3. Restart the dev server after changing environment files
+
 ## Architecture Overview
 
 The project uses a simple but effective micro-frontend pattern:
 
 ```
 Host App (5174)
-├── Design System
+├── Design System (defined here)
 ├── Shared Components
 └── Links to micro-frontends
-    ├── Chat App (5175)
-    └── Email App (5176)
+    ├── Chat App (5175) - consumes design system from host
+    └── Email App (5176) - consumes design system from host
 ```
 
 Each application:
 - Runs on its own port
 - Can be deployed independently
-- Uses the same design system for consistency
+- Chat and Email consume the design system from Host (single source of truth)
 - Maintains its own state and logic
 
 ## Why This Approach?
@@ -59,41 +82,42 @@ Each application:
 
 **Complexity** - More moving parts to manage compared to a monolith.
 
-**Code Duplication** - Design system is currently copied to each app for POC simplicity. In production, this would be a shared npm package.
+**Vite Alias Dependencies** - Chat and Email apps use Vite path aliases to consume the design system from Host. This works great in development but requires proper build configuration for production.
 
 **Initial Setup** - Takes more time upfront to set up the architecture.
 
-> **Note on Design System:** Currently, the design system is copied to `host/`, `chat/`, and `email/` apps. This was intentional for the POC to avoid deployment complexity. In a production environment, the design system would be published as a scoped npm package (`@company/design-system`) that all micro-frontends import, ensuring a true single source of truth.
+> **Note on Design System:** The design system is defined in the `host/src/designSystem/` directory. Chat and Email applications import it using Vite path aliases (`import { Button } from 'host'`). This ensures a single source of truth. In a more mature production environment, you might publish the design system as a scoped npm package (`@company/design-system`) for easier versioning and distribution across multiple teams.
 
 ## Project Structure
 
 ```
 ├── host/                    # Main application (Port 5174)
+│   ├── .env.development     # Development URLs (localhost)
+│   ├── .env.production      # Production URLs (Vercel)
 │   ├── src/
-│   │   ├── designSystem/   # Shared UI components
+│   │   ├── designSystem/   # Design System - Single source of truth
 │   │   │   ├── components/
 │   │   │   │   ├── Button.jsx
 │   │   │   │   ├── Card.jsx
 │   │   │   │   ├── Input.jsx
 │   │   │   │   └── Badge.jsx
-│   │   │   └── styles.css
+│   │   │   ├── styles.css
+│   │   │   └── index.js
 │   │   ├── App.jsx
 │   │   └── main.jsx
 │   └── vite.config.js
 │
 ├── chat/                    # Chat micro-frontend (Port 5175)
 │   ├── src/
-│   │   ├── designSystem/   # Copy of design system
-│   │   ├── App.jsx
+│   │   ├── App.jsx         # Imports design system from 'host'
 │   │   └── main.jsx
-│   └── vite.config.js
+│   └── vite.config.js       # Vite alias: 'host' → '../host/src/designSystem'
 │
 └── email/                   # Email micro-frontend (Port 5176)
     ├── src/
-    │   ├── designSystem/   # Copy of design system
-    │   ├── App.jsx
+    │   ├── App.jsx         # Imports design system from 'host'
     │   └── main.jsx
-    └── vite.config.js
+    └── vite.config.js       # Vite alias: 'host' → '../host/src/designSystem'
 ```
 
 ## Design System
