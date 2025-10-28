@@ -1,5 +1,4 @@
 import React, { useEffect, useRef } from 'react';
-import { Button } from '../designSystem';
 import './MicroFrontendModal.css';
 import { MdChat, MdEmail, MdClose } from 'react-icons/md';
 

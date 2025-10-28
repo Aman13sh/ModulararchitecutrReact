@@ -3,7 +3,7 @@ import './Card.css';
 
 export interface CardProps {
   children: React.ReactNode;
-  title?: string;
+  title?: React.ReactNode;
   footer?: React.ReactNode;
   hoverable?: boolean;
 }
