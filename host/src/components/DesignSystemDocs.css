@@ -53,6 +53,8 @@
   border-radius: var(--radius-md);
   padding: var(--spacing-lg);
   transition: all 0.2s ease;
+  min-width: 0;
+  overflow: hidden;
 }
 
 .variant-card:hover {
@@ -81,38 +83,57 @@
 }
 
 .variant-code {
-  display: flex;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr auto;
   align-items: center;
-  justify-content: space-between;
+  gap: var(--spacing-sm);
   background: var(--gray-900);
   color: var(--success-color);
   padding: var(--spacing-sm) var(--spacing-md);
   border-radius: var(--radius-sm);
   font-family: 'Monaco', 'Menlo', 'Courier New', monospace;
   font-size: 0.75rem;
-  overflow-x: auto;
 }
 
 .variant-code code {
   color: var(--success-color);
   white-space: nowrap;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  padding-right: var(--spacing-sm);
+}
+
+.variant-code code::-webkit-scrollbar {
+  height: 8px;
+}
+
+.variant-code code::-webkit-scrollbar-track {
+  background: var(--gray-800);
+}
+
+.variant-code code::-webkit-scrollbar-thumb {
+  background: var(--gray-600);
+  border-radius: 4px;
 }
 
 .copy-button {
   background: transparent;
-  border: 1px solid var(--gray-700);
+  border: 1px solid var(--gray-600);
   color: var(--gray-300);
-  padding: 4px 8px;
+  padding: 6px;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  font-size: 0.875rem;
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 0;
   flex-shrink: 0;
-  margin-left: var(--spacing-sm);
 }
 
 .copy-button:hover {
-  background: var(--gray-800);
+  background: var(--gray-700);
   border-color: var(--primary-color);
   color: var(--primary-color);
 }

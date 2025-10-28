@@ -404,6 +404,7 @@
 /* Tablet and Desktop */
 @media (min-width: 769px) {
   .email-container {
+    flex-direction: row;
     height: 600px;
   }
 
