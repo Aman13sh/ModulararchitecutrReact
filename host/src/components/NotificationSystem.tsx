@@ -3,7 +3,7 @@ import { Badge } from '../designSystem';
 import eventBus from '../designSystem/eventBus';
 import './NotificationSystem.css';
 import {
-  MdNotifications,
+  // MdNotifications,
   MdCheck,
   MdInfo,
   MdWarning,
@@ -97,12 +97,12 @@ const NotificationSystem: React.FC = () => {
     setNotifications([]);
   };
 
-  const testEventBus = () => {
-    eventBus.emit('notification', {
-      message: 'Test notification from EventBus!',
-      type: 'success'
-    });
-  };
+  // const testEventBus = () => {
+  //   eventBus.emit('notification', {
+  //     message: 'Test notification from EventBus!',
+  //     type: 'success'
+  //   });
+  // };
 
   return (
     <div className="notification-system">
@@ -128,9 +128,9 @@ const NotificationSystem: React.FC = () => {
           </div>
         </div>
         <div className="status-actions">
-          <button onClick={testEventBus} className="test-button" title="Test EventBus" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+          {/* <button onClick={testEventBus} className="test-button" title="Test EventBus" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
             <MdNotifications size={16} /> Test EventBus
-          </button>
+          </button> */}
           {notifications.length > 0 && (
             <button onClick={clearAllNotifications} className="clear-button">
               Clear All

@@ -11,7 +11,7 @@ import {
   MdLightbulb,
   MdRocket,
   MdPalette,
-  MdNotifications,
+  // MdNotifications,
   MdViewQuilt,
   MdCode,
   MdSettings,
@@ -191,12 +191,12 @@ function App() {
                   <Badge variant="success">Interactive</Badge>
                 </div>
 
-                <div className="feature-item">
+                {/* <div className="feature-item">
                   <div className="feature-icon"><MdNotifications size={24} /></div>
                   <h4>EventBus Notifications</h4>
                   <p>Real-time notifications using pub/sub pattern. Track micro-frontend opens, closes, and custom events.</p>
                   <Badge variant="primary">Live Updates</Badge>
-                </div>
+                </div> */}
 
                 <div className="feature-item">
                   <div className="feature-icon"><MdViewQuilt size={24} /></div>
