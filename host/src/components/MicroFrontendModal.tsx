@@ -101,21 +101,6 @@ const MicroFrontendModal: React.FC<MicroFrontendModalProps> = ({
     }
   };
 
-  const sendTestMessage = () => {
-    if (iframeRef.current && iframeRef.current.contentWindow) {
-      iframeRef.current.contentWindow.postMessage(
-        {
-          type: 'TEST_MESSAGE',
-          payload: {
-            message: 'Hello from Host!',
-            timestamp: new Date().toISOString()
-          }
-        },
-        '*'
-      );
-    }
-  };
-
   if (!isOpen) return null;
 
   return (
