@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Button, Card, Input, Badge } from 'host';
 import './App.css';
+import { MdPerson, MdGroup } from 'react-icons/md';
 
 // TypeScript interfaces
 interface Conversation {
@@ -9,7 +10,7 @@ interface Conversation {
   lastMessage: string;
   time: string;
   unread: number;
-  avatar: string;
+  avatar: 'user1' | 'user2' | 'user3' | 'group';
 }
 
 interface Message {
@@ -26,10 +27,10 @@ interface MessagesMap {
 
 // Mock chat data
 const initialConversations: Conversation[] = [
-  { id: 1, name: 'John Doe', lastMessage: 'Hey, how are you?', time: '10:30 AM', unread: 2, avatar: '👨' },
-  { id: 2, name: 'Jane Smith', lastMessage: 'Meeting at 3 PM?', time: '09:15 AM', unread: 0, avatar: '👩' },
-  { id: 3, name: 'Team Chat', lastMessage: 'Project update available', time: 'Yesterday', unread: 5, avatar: '👥' },
-  { id: 4, name: 'Sarah Wilson', lastMessage: 'Thanks for the help!', time: 'Yesterday', unread: 0, avatar: '👩‍💼' },
+  { id: 1, name: 'John Doe', lastMessage: 'Hey, how are you?', time: '10:30 AM', unread: 2, avatar: 'user1' },
+  { id: 2, name: 'Jane Smith', lastMessage: 'Meeting at 3 PM?', time: '09:15 AM', unread: 0, avatar: 'user2' },
+  { id: 3, name: 'Team Chat', lastMessage: 'Project update available', time: 'Yesterday', unread: 5, avatar: 'group' },
+  { id: 4, name: 'Sarah Wilson', lastMessage: 'Thanks for the help!', time: 'Yesterday', unread: 0, avatar: 'user3' },
 ];
 
 const initialMessages: MessagesMap = {
@@ -64,6 +65,13 @@ function ChatApp() {
   const [newMessage, setNewMessage] = useState<string>('');
   const [searchQuery, setSearchQuery] = useState<string>('');
 
+  // Helper function to render avatar icons
+  const renderAvatar = (avatarType: Conversation['avatar']) => {
+    if (avatarType === 'group') {
+      return <MdGroup size={20} />;
+    }
+    return <MdPerson size={20} />;
+  };
 
   const handleSendMessage = () => {
     if (newMessage.trim()) {
@@ -121,7 +129,7 @@ function ChatApp() {
                   className={`conversation-item ${conv.id === selectedConversation ? 'active' : ''}`}
                   onClick={() => setSelectedConversation(conv.id)}
                 >
-                  <div className="conversation-avatar">{conv.avatar}</div>
+                  <div className="conversation-avatar">{renderAvatar(conv.avatar)}</div>
                   <div className="conversation-info">
                     <div className="conversation-header">
                       <span className="conversation-name">{conv.name}</span>
@@ -142,7 +150,7 @@ function ChatApp() {
           {/* Messages Area */}
           <div className="messages-panel">
             <div className="messages-header">
-              <div className="conversation-avatar">{currentConversation?.avatar}</div>
+              <div className="conversation-avatar">{currentConversation && renderAvatar(currentConversation.avatar)}</div>
               <div>
                 <h3>{currentConversation?.name}</h3>
                 <span className="status">Active now</span>

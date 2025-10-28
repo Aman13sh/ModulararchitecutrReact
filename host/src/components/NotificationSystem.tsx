@@ -2,6 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { Badge } from '../designSystem';
 import eventBus from '../designSystem/eventBus';
 import './NotificationSystem.css';
+import {
+  MdNotifications,
+  MdCheck,
+  MdInfo,
+  MdWarning,
+  MdClose
+} from 'react-icons/md';
 
 interface Notification {
   id: string;
@@ -121,8 +128,8 @@ const NotificationSystem: React.FC = () => {
           </div>
         </div>
         <div className="status-actions">
-          <button onClick={testEventBus} className="test-button" title="Test EventBus">
-            🔔 Test EventBus
+          <button onClick={testEventBus} className="test-button" title="Test EventBus" style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+            <MdNotifications size={16} /> Test EventBus
           </button>
           {notifications.length > 0 && (
             <button onClick={clearAllNotifications} className="clear-button">
@@ -141,10 +148,10 @@ const NotificationSystem: React.FC = () => {
             onClick={() => removeNotification(notification.id)}
           >
             <div className="notification-icon">
-              {notification.type === 'success' && '✓'}
-              {notification.type === 'info' && 'ℹ'}
-              {notification.type === 'warning' && '⚠'}
-              {notification.type === 'error' && '✕'}
+              {notification.type === 'success' && <MdCheck size={18} />}
+              {notification.type === 'info' && <MdInfo size={18} />}
+              {notification.type === 'warning' && <MdWarning size={18} />}
+              {notification.type === 'error' && <MdClose size={18} />}
             </div>
             <div className="notification-content">
               <div className="notification-message">{notification.message}</div>
@@ -159,7 +166,7 @@ const NotificationSystem: React.FC = () => {
                 removeNotification(notification.id);
               }}
             >
-              ✕
+              <MdClose size={16} />
             </button>
           </div>
         ))}

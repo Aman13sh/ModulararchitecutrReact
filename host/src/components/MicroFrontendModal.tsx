@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import { Button } from '../designSystem';
 import './MicroFrontendModal.css';
+import { MdChat, MdEmail, MdClose } from 'react-icons/md';
 
 interface MicroFrontendModalProps {
   isOpen: boolean;
@@ -123,15 +124,17 @@ const MicroFrontendModal: React.FC<MicroFrontendModalProps> = ({
       <div className="modal-container" onClick={e => e.stopPropagation()}>
         <div className="modal-header">
           <div className="modal-title">
-            <span className="modal-icon">{app === 'chat' ? '💬' : '📧'}</span>
+            <span className="modal-icon">
+              {app === 'chat' ? <MdChat size={24} /> : <MdEmail size={24} />}
+            </span>
             <h2>{title}</h2>
           </div>
           <div className="modal-actions">
-            <Button variant="outline" size="small" onClick={sendTestMessage}>
+            {/* <Button variant="outline" size="small" onClick={sendTestMessage}>
               Send Test Message
-            </Button>
+            </Button> */}
             <button className="modal-close" onClick={onClose}>
-              ✕
+              <MdClose size={20} />
             </button>
           </div>
         </div>

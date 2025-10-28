@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Button, Card, Input, Badge } from 'host';
 import './App.css';
+import { MdMail, MdInbox, MdMarkunread, MdStar, MdStarBorder } from 'react-icons/md';
 
 // Email interface
 interface Email {
@@ -135,7 +136,9 @@ function EmailApp() {
           {/* Sidebar */}
           <div className="email-sidebar">
             <Button onClick={handleCompose} variant="primary" fullWidth>
-              ✉️ Compose
+              <span style={{ display: 'flex', alignItems: 'center', gap: '6px', justifyContent: 'center' }}>
+                <MdMail size={16} /> Compose
+              </span>
             </Button>
 
             <div className="email-filters">
@@ -143,21 +146,27 @@ function EmailApp() {
                 className={`filter-button ${filter === 'all' ? 'active' : ''}`}
                 onClick={() => setFilter('all')}
               >
-                📥 All Mail
+                <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <MdInbox size={16} /> All Mail
+                </span>
                 <Badge variant="default">{emails.length}</Badge>
               </button>
               <button
                 className={`filter-button ${filter === 'unread' ? 'active' : ''}`}
                 onClick={() => setFilter('unread')}
               >
-                📬 Unread
+                <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <MdMarkunread size={16} /> Unread
+                </span>
                 {unreadCount > 0 && <Badge variant="danger">{unreadCount}</Badge>}
               </button>
               <button
                 className={`filter-button ${filter === 'starred' ? 'active' : ''}`}
                 onClick={() => setFilter('starred')}
               >
-                ⭐ Starred
+                <span style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <MdStar size={16} /> Starred
+                </span>
                 <Badge variant="warning">{emails.filter(e => e.isStarred).length}</Badge>
               </button>
             </div>
@@ -188,7 +197,7 @@ function EmailApp() {
                       className={`star-button ${email.isStarred ? 'starred' : ''}`}
                       onClick={(e) => handleStarToggle(email.id, e)}
                     >
-                      {email.isStarred ? '⭐' : '☆'}
+                      {email.isStarred ? <MdStar size={18} /> : <MdStarBorder size={18} />}
                     </button>
                     <span className="email-from">{email.from}</span>
                     <span className="email-time">{email.time}</span>

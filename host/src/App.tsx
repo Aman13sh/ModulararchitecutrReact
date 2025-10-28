@@ -5,6 +5,19 @@ import eventBus from './designSystem/eventBus';
 import DesignSystemDocs from './components/DesignSystemDocs';
 import MicroFrontendModal from './components/MicroFrontendModal';
 import NotificationSystem from './components/NotificationSystem';
+import {
+  MdChat,
+  MdEmail,
+  MdLightbulb,
+  MdRocket,
+  MdPalette,
+  MdNotifications,
+  MdViewQuilt,
+  MdCode,
+  MdSettings,
+  MdSync,
+  MdInventory
+} from 'react-icons/md';
 
 function App() {
   const chatUrl = import.meta.env.VITE_CHAT_URL || 'http://localhost:5175';
@@ -87,7 +100,9 @@ function App() {
                 {/* Chat Card */}
                 <div style={{ flex: 1, minWidth: '250px' }}>
                   <Card hoverable>
-                    <h3 style={{ marginBottom: '10px' }}>💬 Chat Application</h3>
+                    <h3 style={{ marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <MdChat size={20} /> Chat Application
+                    </h3>
                     <p style={{ marginBottom: '15px', color: '#6b7280' }}>
                       Real-time messaging interface with conversations, search, and notifications.
                     </p>
@@ -113,7 +128,9 @@ function App() {
                 {/* Email Card */}
                 <div style={{ flex: 1, minWidth: '250px' }}>
                   <Card hoverable>
-                    <h3 style={{ marginBottom: '10px' }}>📧 Email Application</h3>
+                    <h3 style={{ marginBottom: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                      <MdEmail size={20} /> Email Application
+                    </h3>
                     <p style={{ marginBottom: '15px', color: '#6b7280' }}>
                       Full-featured email client with inbox, compose, and filtering capabilities.
                     </p>
@@ -143,53 +160,54 @@ function App() {
                 borderRadius: '8px',
                 border: '1px solid #bfdbfe'
               }}>
-                <p style={{ margin: 0, fontSize: '0.875rem', color: '#1e40af' }}>
-                  <strong>💡 Pro Tip:</strong> Click "Open in Modal" to see iframe embedding with postMessage
-                  communication. Watch the notification system track app opens/closes via EventBus!
+                <p style={{ margin: 0, fontSize: '0.875rem', color: '#1e40af', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <MdLightbulb size={16} style={{ flexShrink: 0 }} />
+                  <span><strong>Pro Tip:</strong> Click "Open in Modal" to see iframe embedding with postMessage
+                  communication. Watch the notification system track app opens/closes via EventBus!</span>
                 </p>
               </div>
             </Card>
 
             {/* Features Section */}
-            <Card title="🚀 Professional Features Implemented">
+            <Card title={<span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><MdRocket size={20} /> Professional Features Implemented</span>}>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
                 <div className="feature-item">
-                  <div className="feature-icon">🎨</div>
+                  <div className="feature-icon"><MdPalette size={24} /></div>
                   <h4>Design System Docs</h4>
                   <p>Storybook-like component showcase with live examples, prop tables, and copy-to-clipboard code snippets.</p>
                   <Badge variant="success">Interactive</Badge>
                 </div>
 
                 <div className="feature-item">
-                  <div className="feature-icon">🔔</div>
+                  <div className="feature-icon"><MdNotifications size={24} /></div>
                   <h4>EventBus Notifications</h4>
                   <p>Real-time notifications using pub/sub pattern. Track micro-frontend opens, closes, and custom events.</p>
                   <Badge variant="primary">Live Updates</Badge>
                 </div>
 
                 <div className="feature-item">
-                  <div className="feature-icon">🖼️</div>
+                  <div className="feature-icon"><MdViewQuilt size={24} /></div>
                   <h4>Iframe Embedding</h4>
                   <p>Lazy-loaded micro-frontends in modals with postMessage for cross-origin communication.</p>
                   <Badge variant="secondary">PostMessage</Badge>
                 </div>
 
                 <div className="feature-item">
-                  <div className="feature-icon">📘</div>
+                  <div className="feature-icon"><MdCode size={24} /></div>
                   <h4>TypeScript</h4>
                   <p>Fully typed application with interfaces, type safety, and excellent IDE support.</p>
                   <Badge variant="success">Type-Safe</Badge>
                 </div>
 
                 <div className="feature-item">
-                  <div className="feature-icon">⚙️</div>
+                  <div className="feature-icon"><MdSettings size={24} /></div>
                   <h4>Environment Config</h4>
                   <p>Smart URL routing based on environment (localhost in dev, Vercel URLs in production).</p>
                   <Badge variant="warning">Auto-Switch</Badge>
                 </div>
 
                 <div className="feature-item">
-                  <div className="feature-icon">🔄</div>
+                  <div className="feature-icon"><MdSync size={24} /></div>
                   <h4>Shared Design System</h4>
                   <p>Single source of truth for UI components consumed by all micro-frontends via Vite aliases.</p>
                   <Badge variant="primary">Consistent</Badge>
@@ -200,20 +218,26 @@ function App() {
             {/* Architecture Overview */}
             <Card title="Architecture Overview">
               <div style={{ backgroundColor: '#f9fafb', padding: '20px', borderRadius: '8px', fontFamily: 'monospace', fontSize: '14px', lineHeight: '1.8' }}>
-                <div>📦 <strong>Host Application</strong></div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <MdInventory size={16} /> <strong>Host Application</strong>
+                </div>
                 <div style={{ paddingLeft: '20px' }}>├─ Design System (Single Source of Truth)</div>
                 <div style={{ paddingLeft: '20px' }}>├─ EventBus (Pub/Sub Communication)</div>
                 <div style={{ paddingLeft: '20px' }}>├─ Notification System</div>
                 <div style={{ paddingLeft: '20px' }}>├─ Iframe Modal (Lazy Loading)</div>
                 <div style={{ paddingLeft: '20px' }}>└─ Design System Documentation</div>
                 <br />
-                <div>💬 <strong>Chat Micro-Frontend</strong></div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <MdChat size={16} /> <strong>Chat Micro-Frontend</strong>
+                </div>
                 <div style={{ paddingLeft: '20px' }}>├─ Independent TypeScript React App</div>
                 <div style={{ paddingLeft: '20px' }}>├─ Consumes Design System from Host</div>
                 <div style={{ paddingLeft: '20px' }}>├─ PostMessage Communication Ready</div>
                 <div style={{ paddingLeft: '20px' }}>└─ Standalone & Embeddable</div>
                 <br />
-                <div>📧 <strong>Email Micro-Frontend</strong></div>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <MdEmail size={16} /> <strong>Email Micro-Frontend</strong>
+                </div>
                 <div style={{ paddingLeft: '20px' }}>├─ Independent TypeScript React App</div>
                 <div style={{ paddingLeft: '20px' }}>├─ Consumes Design System from Host</div>
                 <div style={{ paddingLeft: '20px' }}>├─ PostMessage Communication Ready</div>

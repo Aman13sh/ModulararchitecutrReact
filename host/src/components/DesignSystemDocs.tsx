@@ -2,6 +2,15 @@ import React from 'react';
 import { Button, Card, Input, Badge } from '../designSystem';
 import type { ButtonProps, BadgeProps } from '../designSystem';
 import './DesignSystemDocs.css';
+import {
+  MdPalette,
+  MdCircle,
+  MdLabel,
+  MdInventory,
+  MdEdit,
+  MdContentCopy,
+  MdCheck
+} from 'react-icons/md';
 
 interface ComponentExample {
   name: string;
@@ -103,7 +112,7 @@ const DesignSystemDocs: React.FC = () => {
 
   return (
     <div className="design-system-docs">
-      <Card title="🎨 Design System Documentation">
+      <Card title={<span style={{ display: 'flex', alignItems: 'center', gap: '8px' }}><MdPalette size={20} /> Design System Documentation</span>}>
         <p className="docs-intro">
           Complete component library with TypeScript support. All components are built with accessibility,
           consistency, and reusability in mind.
@@ -112,7 +121,7 @@ const DesignSystemDocs: React.FC = () => {
         {/* Button Documentation */}
         <section className="component-section">
           <h3 className="component-title">
-            <span className="component-icon">🔘</span>
+            <span className="component-icon"><MdCircle size={20} /></span>
             {buttonExamples.name}
           </h3>
           <p className="component-description">{buttonExamples.description}</p>
@@ -131,7 +140,7 @@ const DesignSystemDocs: React.FC = () => {
                     onClick={() => handleCopyCode(variant.code)}
                     title="Copy code"
                   >
-                    {copiedCode === variant.code ? '✓' : '📋'}
+                    {copiedCode === variant.code ? <MdCheck size={14} /> : <MdContentCopy size={14} />}
                   </button>
                 </div>
               </div>
@@ -188,7 +197,7 @@ const DesignSystemDocs: React.FC = () => {
         {/* Badge Documentation */}
         <section className="component-section">
           <h3 className="component-title">
-            <span className="component-icon">🏷️</span>
+            <span className="component-icon"><MdLabel size={20} /></span>
             {badgeExamples.name}
           </h3>
           <p className="component-description">{badgeExamples.description}</p>
@@ -207,7 +216,7 @@ const DesignSystemDocs: React.FC = () => {
                     onClick={() => handleCopyCode(variant.code)}
                     title="Copy code"
                   >
-                    {copiedCode === variant.code ? '✓' : '📋'}
+                    {copiedCode === variant.code ? <MdCheck size={14} /> : <MdContentCopy size={14} />}
                   </button>
                 </div>
               </div>
@@ -246,7 +255,7 @@ const DesignSystemDocs: React.FC = () => {
         {/* Card & Input Examples */}
         <section className="component-section">
           <h3 className="component-title">
-            <span className="component-icon">📦</span>
+            <span className="component-icon"><MdInventory size={20} /></span>
             Card
           </h3>
           <p className="component-description">Container component for grouping content</p>
@@ -290,7 +299,7 @@ const DesignSystemDocs: React.FC = () => {
 
         <section className="component-section">
           <h3 className="component-title">
-            <span className="component-icon">✏️</span>
+            <span className="component-icon"><MdEdit size={20} /></span>
             Input
           </h3>
           <p className="component-description">Form input component with validation support</p>
